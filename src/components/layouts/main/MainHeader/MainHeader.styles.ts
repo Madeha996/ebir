@@ -1,17 +1,18 @@
-import { LAYOUT } from '@app/styles/themes/constants';
-import { media } from '@app/styles/themes/constants';
-import { Layout } from 'antd';
-import styled, { css } from 'styled-components';
+import { LAYOUT } from "@app/styles/themes/constants";
+import { media } from "@app/styles/themes/constants";
+import { Layout } from "antd";
+import styled, { css } from "styled-components";
 
-interface Header {
+interface HeaderProps {
   $isTwoColumnsLayoutHeader: boolean;
 }
 
-export const Header = styled(Layout.Header)<Header>`
+export const Header = styled(Layout.Header)<HeaderProps>`
   line-height: 1.5;
 
   @media only screen and ${media.md} {
-    padding: ${LAYOUT.desktop.paddingVertical} ${LAYOUT.desktop.paddingHorizontal};
+    padding: ${LAYOUT.desktop.paddingVertical}
+      ${LAYOUT.desktop.paddingHorizontal};
     height: ${LAYOUT.desktop.headerHeight};
   }
 
