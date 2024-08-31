@@ -68,7 +68,7 @@ export const defineColorBySeverity = (
   }
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line
 export const mergeBy = (a: any[], b: any[], key: string): any[] =>
   a
     .filter((elem) => !b.find((subElem) => subElem[key] === elem[key]))

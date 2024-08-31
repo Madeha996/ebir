@@ -1,8 +1,8 @@
-import styled, { css } from 'styled-components';
-import { Col, Collapse, Menu } from 'antd';
-import { BurgerIcon } from '@app/components/common/Burger/BurgerIcon';
-import { GitHubButton } from '@app/components/header/components/GithubButton/GitHubButton';
-import { BORDER_RADIUS, LAYOUT, media } from '@app/styles/themes/constants';
+import styled, { css } from "styled-components";
+import { Col, Collapse, Menu } from "antd";
+import { BurgerIcon } from "@app/components/common/Burger/BurgerIcon";
+import { GitHubButton } from "@app/components/header/components/GithubButton/GitHubButton";
+import { BORDER_RADIUS, LAYOUT, media } from "@app/styles/themes/constants";
 
 export const DropdownMenu = styled(Menu)`
   line-height: 1.5715;
@@ -17,7 +17,7 @@ export const DropdownMenu = styled(Menu)`
 export const HeaderActionWrapper = styled.div`
   cursor: pointer;
 
-  & > .ant-btn > span[role='img'],
+  & > .ant-btn > span[role="img"],
   .ant-badge {
     font-size: 1.25rem;
 
@@ -46,7 +46,7 @@ export const DropdownCollapse = styled(Collapse)`
   & > .ant-collapse-item-disabled > .ant-collapse-header {
     cursor: default;
 
-    & > span[role='img'] {
+    & > span[role="img"] {
       display: none;
     }
   }
@@ -74,17 +74,18 @@ export const SearchColumn = styled(Col)`
   padding: ${LAYOUT.desktop.paddingVertical} ${LAYOUT.desktop.paddingHorizontal};
 `;
 
-interface ProfileColumn {
+interface ProfileColumnProp {
   $isTwoColumnsLayout: boolean;
 }
 
-export const ProfileColumn = styled(Col)<ProfileColumn>`
+export const ProfileColumn = styled(Col)<ProfileColumnProp>`
   @media only screen and ${media.md} {
     ${(props) =>
       props?.$isTwoColumnsLayout &&
       css`
         background-color: var(--sider-background-color);
-        padding: ${LAYOUT.desktop.paddingVertical} ${LAYOUT.desktop.paddingHorizontal};
+        padding: ${LAYOUT.desktop.paddingVertical}
+          ${LAYOUT.desktop.paddingHorizontal};
       `}
   }
 `;
