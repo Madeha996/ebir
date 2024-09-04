@@ -15,13 +15,13 @@ const formItemLayout = {
 };
 
 interface FilesFormProps {
-  handeSubmissionFiles: any;
-  handleUploadFiles: any;
+  filesList: any[];
+  newFilesList: any[];
+  handeSubmissionFiles: () => void;
+  handleUploadFiles: (info: any) => void;
   setNewFilesList: any;
-  newFilesList: any;
   onFinish: any;
-  filesList: any;
-  handleDeleteFileCard: any;
+  handleDeleteFileCard: (uid: string) => void;
   loading: boolean;
 }
 

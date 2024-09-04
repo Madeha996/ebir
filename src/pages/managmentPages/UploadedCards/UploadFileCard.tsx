@@ -13,7 +13,7 @@ import {
   UploadAttachment,
 } from "@app/api/files";
 import { useParams } from "react-router-dom";
-import PdfImg from "@app/assets/images/login-bg.webp";
+import PdfImg from "@app/assets/images/pdf.png";
 import { Link } from "react-router-dom";
 import { Spinner } from "@app/components/common/Spinner/Spinner.styles";
 import { Modal } from "@app/components/common/Modal/Modal";
@@ -60,6 +60,9 @@ const UploadFilesCard = ({
   const deleteAttachmentMutation = useMutation((id: string) =>
     DeleteAttachment(id)
   );
+
+  console.log("fileId", fileId);
+
   const editAttachmentMutation = useMutation(
     ({
       id,
@@ -162,7 +165,7 @@ const UploadFilesCard = ({
       >
         <Row align="top" justify="space-between">
           <Col span={4}>
-            <Link to={fileId ? url : filePath} target="_blank">
+            <Link to={id ? url : filePath} target="_blank">
               <Image
                 src={PdfImg}
                 alt="pdf-img"
@@ -210,7 +213,7 @@ const UploadFilesCard = ({
       </Card>
       <div>
         <Modal
-          title={t("common.DeleteModal")}
+          title={t("common.deleteModal")}
           centered
           visible={isDeleteVisible}
           onOk={() => {

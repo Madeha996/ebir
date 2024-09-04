@@ -23,6 +23,7 @@ interface UploadedImageCardProps {
     index: number,
     data: { title?: string; description?: string }
   ) => void;
+  setDeleting?: any;
 }
 
 const UploadedImageCard = ({
@@ -35,6 +36,7 @@ const UploadedImageCard = ({
   uid,
   index,
   getChildData,
+  setDeleting,
 }: UploadedImageCardProps) => {
   const { t } = useTranslation();
   const url = `https://eabir-backend.onrender.com${filePath}`;
@@ -61,6 +63,7 @@ const UploadedImageCard = ({
     }) => EditAttachment(id, title, description),
     {
       onSuccess: () => {
+        setDeleting(true);
         setIsFieldsChanged(false);
         setIsDisable(true);
         message.success("Attachment edited successfully");
@@ -211,7 +214,7 @@ const UploadedImageCard = ({
         </Card>
         <div>
           <Modal
-            title={t("common.DeleteModal")}
+            title={t("common.deleteModal")}
             centered
             visible={isDeleteVisible}
             onOk={() => {

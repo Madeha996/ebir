@@ -33,7 +33,7 @@ const PageSettingPage: React.FC = () => {
   const [isDeleting, setDeleting] = useState(false);
 
   const { data: attachmentByPageId, refetch } = useQuery(
-    ["attachments", pageId],
+    ["attachments", pageId, isDeleting, isEditing],
     () => GetAttachmentByPageId(pageId ?? ""),
     {
       onSuccess: (data) => {
@@ -143,9 +143,12 @@ const PageSettingPage: React.FC = () => {
           ? setNewVideosList
           : setNewFilesList;
       setList((prevList) => prevList.filter((item) => item.uid !== uid));
-      setDeleting(false);
     }, 1000);
   };
+
+  useEffect(() => {
+    refetch();
+  }, [isDeleting, imagesList, videosList, filesList]);
 
   return (
     <>
@@ -168,6 +171,7 @@ const PageSettingPage: React.FC = () => {
           )}
           loading={isLoading}
           setNewImagesList={setNewImagesList}
+          setDeleting={setDeleting}
         />
         <Divider />
         <VideoForm

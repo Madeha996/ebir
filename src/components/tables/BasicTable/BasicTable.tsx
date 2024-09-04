@@ -22,6 +22,7 @@ import {
 import dayjs from "dayjs";
 import { CURRENT_PAGINATION, PAGE_SIZE_PAGINATION } from "@app/constants/Pages";
 import { useNavigate } from "react-router-dom";
+import { Spinner } from "@app/components/common/Spinner/Spinner.styles";
 
 export const BasicTable: React.FC = () => {
   const { t } = useTranslation();
@@ -47,6 +48,8 @@ export const BasicTable: React.FC = () => {
   const [keyWord, setKeyWord] = useState<string>("");
   const [loading, setLoading] = useState(true);
   const [refetchOnAddPage, setRefetchOnAddPage] = useState(false);
+  const [refetchOnEditPage, setRefetchOnEditPage] = useState(false);
+  const [refetchOnDeletePage, setRefetchOnDeletePage] = useState(false);
 
   const showAddModal = () => {
     setIsAddVisible(true);
@@ -61,7 +64,7 @@ export const BasicTable: React.FC = () => {
     setIsEditVisible(false);
   };
 
-  const { refetch, isRefetching } = useQuery(
+  const { data, isLoading, refetch, isRefetching, isFetched, error } = useQuery(
     [
       "pages",
       pagination.current,
@@ -69,30 +72,43 @@ export const BasicTable: React.FC = () => {
       isDelete,
       isEdit,
       refetchOnAddPage,
+      refetchOnEditPage,
+      refetchOnDeletePage,
     ],
-    () =>
-      GetAllPages(pagination.current ?? 1, pagination.pageSize ?? 10, keyWord)
+    async () => {
+      setLoading(true); // Set loading to true before the API request
+      return await GetAllPages(
+        pagination.current ?? 1,
+        pagination.pageSize ?? 10,
+        keyWord
+      )
         .then((data) => {
           setTableData(data?.data);
-          setLoading(data.data?.success);
+          setLoading(false); // Set loading to false after receiving data
+          return data; // Ensure the data is returned for useQuery to process
         })
         .catch((err) => {
-          setLoading(false);
+          setLoading(false); // Set loading to false on error
           notificationController.error({
             message: err?.message || err.error?.message,
           });
-        })
+          throw err; // Ensure the error is thrown to let useQuery handle it
+        });
+    }
+    // {
+    //   enabled: refetchOnAddPage, // Prevent refetching if already fetching
+    // }
   );
 
-  // useEffect(() => {
-  //   refetch();
-  // }, [loading]);
+  useEffect(() => {
+    refetch();
+  }, [isFetched]);
 
   const AddPage = useMutation((data: PagesModal) =>
     CreatePage(data.name)
       .then(() => {
         notificationController.success({
-          message: t("Pagess.addPagesSuccessMessage"),
+          message: t("common.addPagesSuccessMessage"),
         });
         setIsAddVisible(false);
         setRefetchOnAddPage(true);
@@ -111,11 +127,12 @@ export const BasicTable: React.FC = () => {
       .mutateAsync({ ...data, _id })
       .then((data) => {
         setIsEdit(data.data?.success);
-        setLoading(true);
+        setIsEditVisible(false);
+        setRefetchOnEditPage(true);
         message.open({
           content: (
             <Alert
-              message={t(`Pagess.editPagesSuccessMessage`)}
+              message={t(`common.editPagesSuccessMessage`)}
               type={`success`}
               showIcon
             />
@@ -135,6 +152,7 @@ export const BasicTable: React.FC = () => {
       })
       .finally(() => {
         setLoading(false);
+        setRefetchOnEditPage(false);
       });
   };
 
@@ -147,8 +165,21 @@ export const BasicTable: React.FC = () => {
         setPagination({ ...pagination, current: pagination.current - 1 });
         setLoading(true);
       } else {
-        daletePage.mutateAsync(id);
-        setLoading(false);
+        daletePage
+          .mutateAsync(id)
+          .then(() => {
+            notificationController.success({
+              message: t("common.deletePagesSuccessMessage"),
+            });
+            setIsAddVisible(false);
+            setRefetchOnDeletePage(true);
+          })
+          .catch((error) => {
+            notificationController.error({
+              message: error.message || error.error?.message,
+            });
+          })
+          .finally(() => setLoading(false));
       }
     }
   };
@@ -235,7 +266,7 @@ export const BasicTable: React.FC = () => {
       />
       <div>
         <Modal
-          title={t("common.DeleteModal")}
+          title={t("common.deleteModal")}
           centered
           visible={isDeleteVisible}
           onOk={() => {
@@ -246,7 +277,7 @@ export const BasicTable: React.FC = () => {
           onCancel={() => setIsDeleteVisible(false)}
           size="small"
         >
-          <p>{t("modals.deleteEnsureMessage")}</p>
+          <p>{t("common.deleteEnsureMessage")}</p>
         </Modal>
       </div>
       <Table
@@ -263,7 +294,7 @@ export const BasicTable: React.FC = () => {
           },
           total: 20,
         }}
-        // loading={tableData.loading}
+        // loading={loading}
         // onChange={handleTableChange}
         scroll={{ x: 800 }}
         bordered
