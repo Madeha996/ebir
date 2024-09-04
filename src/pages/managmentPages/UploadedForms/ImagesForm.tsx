@@ -22,6 +22,7 @@ interface ImagesFormProps {
   handeSubmissionImages: () => void;
   handleDeleteImageCard: (uid: string) => void;
   onFinish: () => void;
+  setDeleting: any;
 }
 
 export const ImagesForm = ({
@@ -33,6 +34,7 @@ export const ImagesForm = ({
   onFinish,
   setNewImagesList,
   loading,
+  setDeleting,
 }: ImagesFormProps) => {
   const [isFieldsChanged, setFieldsChanged] = useState(false);
   const { t } = useTranslation();
@@ -106,6 +108,7 @@ export const ImagesForm = ({
                     filePath={item.filePath}
                     description={item.description}
                     id={item._id}
+                    setDeleting={setDeleting}
                   />
                 ))}
               </Row>

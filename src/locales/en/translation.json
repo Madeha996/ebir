@@ -155,7 +155,12 @@
     "files-managment": "Files Managment",
     "id": "Id",
     "updatedAt": "Updated At",
-    "createdAt": "Created At"
+    "createdAt": "Created At",
+    "addPagesSuccessMessage": "Page added Successfully",
+    "editPagesSuccessMessage": "Page updated Successfully",
+    "editPage": "Edit Page",
+    "deleteEnsureMessage": "Do you want to delete page ?",
+    "deletePagesSuccessMessage": "Page deleted Successfully"
   },
   "dataDisplay": {
     "avatars": {

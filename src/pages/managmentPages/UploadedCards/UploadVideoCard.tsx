@@ -213,7 +213,7 @@ const UploadVideoCard = ({
         </Card>
         <div>
           <Modal
-            title={t("common.DeleteModal")}
+            title={t("common.deleteModal")}
             centered
             visible={isDeleteVisible}
             onOk={() => {

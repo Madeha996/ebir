@@ -36,7 +36,7 @@ export const EditFormModal: React.FC<EditFormModalProps> = ({
   };
   return (
     <Modal
-      title={t("Add New")}
+      title={t("common.editPage")}
       visible={visible}
       onOk={onOk}
       onCancel={onCancel}
