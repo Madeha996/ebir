@@ -147,6 +147,8 @@
     "delete": "Delete",
 
     "pages-managment": "Pages Managment",
+    "news-page": "News",
+    "contact-page": "Contact Us",
     "university-managment": "University Managment",
     "specialization-managment": "specialization Managment",
     "years-managment": "Years Managment",
@@ -160,7 +162,13 @@
     "editPagesSuccessMessage": "Page updated Successfully",
     "editPage": "Edit Page",
     "deleteEnsureMessage": "Do you want to delete page ?",
-    "deletePagesSuccessMessage": "Page deleted Successfully"
+    "deletePagesSuccessMessage": "Page deleted Successfully",
+    "whatsapp": "WhatsApp",
+    "twitter": "Twitter",
+    "facebook": "Facebook",
+    "snapchat": "Snapchat",
+    "telegram": "Telegram",
+    "tiktok": "Tiktok"
   },
   "dataDisplay": {
     "avatars": {

@@ -12,19 +12,13 @@ import { useMutation, useQuery } from "react-query";
 import { notificationController } from "@app/controllers/notificationController";
 import { PagesModal } from "@app/domain/AppModal";
 import { Alert } from "@app/components/common/Alert/Alert";
-import {
-  CreatePage,
-  DeletePage,
-  GetAllPages,
-  PagesTableData,
-  UpdatePage,
-} from "@app/api/pages.api";
+import { PagesTableData } from "@app/api/pages.api";
 import dayjs from "dayjs";
 import { CURRENT_PAGINATION, PAGE_SIZE_PAGINATION } from "@app/constants/Pages";
 import { useNavigate } from "react-router-dom";
-import { Spinner } from "@app/components/common/Spinner/Spinner.styles";
+import { CreateNew, DeleteNew, GetAllNews, UpdateNew } from "@app/api/news.api";
 
-export const BasicTable: React.FC = () => {
+export const NewsBasicTable: React.FC = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [editmodaldata, setEditmodaldata] = useState<PagesModal | undefined>(
@@ -47,9 +41,9 @@ export const BasicTable: React.FC = () => {
   const [isDelete, setIsDelete] = useState<boolean>(false);
   const [keyWord, setKeyWord] = useState<string>("");
   const [loading, setLoading] = useState(true);
-  const [refetchOnAddPage, setRefetchOnAddPage] = useState(false);
-  const [refetchOnEditPage, setRefetchOnEditPage] = useState(false);
-  const [refetchOnDeletePage, setRefetchOnDeletePage] = useState(false);
+  const [refetchOnAddNew, setRefetchOnAddNew] = useState(false);
+  const [refetchOnEditNew, setRefetchOnEditNew] = useState(false);
+  const [refetchOnDeleteNew, setRefetchOnDeleteNew] = useState(false);
 
   const showAddModal = () => {
     setIsAddVisible(true);
@@ -71,13 +65,13 @@ export const BasicTable: React.FC = () => {
       pagination.pageSize,
       isDelete,
       isEdit,
-      refetchOnAddPage,
-      refetchOnEditPage,
-      refetchOnDeletePage,
+      refetchOnAddNew,
+      refetchOnEditNew,
+      refetchOnDeleteNew,
     ],
     async () => {
       setLoading(true); // Set loading to true before the API request
-      return await GetAllPages(
+      return await GetAllNews(
         pagination.current ?? 1,
         pagination.pageSize ?? 10,
         keyWord
@@ -104,14 +98,14 @@ export const BasicTable: React.FC = () => {
     refetch();
   }, [isFetched]);
 
-  const AddPage = useMutation((data: PagesModal) =>
-    CreatePage(data.name)
+  const AddNew = useMutation((data: PagesModal) =>
+    CreateNew(data.name)
       .then(() => {
         notificationController.success({
           message: t("common.addPagesSuccessMessage"),
         });
         setIsAddVisible(false);
-        setRefetchOnAddPage(true);
+        setRefetchOnAddNew(true);
       })
       .catch((error) => {
         notificationController.error({
@@ -120,15 +114,15 @@ export const BasicTable: React.FC = () => {
       })
   );
 
-  const editPage = useMutation((data: PagesModal) => UpdatePage(data));
+  const editNew = useMutation((data: PagesModal) => UpdateNew(data));
 
   const handleEdit = (data: PagesModal, _id: string) => {
-    editPage
+    editNew
       .mutateAsync({ ...data, _id })
       .then((data) => {
         setIsEdit(data.data?.success);
         setIsEditVisible(false);
-        setRefetchOnEditPage(true);
+        setRefetchOnEditNew(true);
         message.open({
           content: (
             <Alert
@@ -152,27 +146,27 @@ export const BasicTable: React.FC = () => {
       })
       .finally(() => {
         setLoading(false);
-        setRefetchOnEditPage(false);
+        setRefetchOnEditNew(false);
       });
   };
 
-  const daletePage = useMutation((id: string) => DeletePage(id));
+  const daleteNew = useMutation((id: string) => DeleteNew(id));
 
   const handleDelete = (id: string) => {
     if (pagination.current) {
       if (pagination.current > 1 && tableData?.data?.length === 1) {
-        daletePage.mutateAsync(id);
+        daleteNew.mutateAsync(id);
         setPagination({ ...pagination, current: pagination.current - 1 });
         setLoading(true);
       } else {
-        daletePage
+        daleteNew
           .mutateAsync(id)
           .then(() => {
             notificationController.success({
               message: t("common.deletePagesSuccessMessage"),
             });
             setIsAddVisible(false);
-            setRefetchOnDeletePage(true);
+            setRefetchOnDeleteNew(true);
           })
           .catch((error) => {
             notificationController.error({
@@ -235,12 +229,6 @@ export const BasicTable: React.FC = () => {
             >
               {t("tables.delete")}
             </Button>
-            <Button
-              type="default"
-              onClick={() => navigate(`/pageSetting/${record?._id}`)}
-            >
-              {t("tables.setting")}
-            </Button>
           </Space>
         );
       },
@@ -256,7 +244,7 @@ export const BasicTable: React.FC = () => {
         visible={isAddVisible}
         onCancel={hideAddModal}
         onCreate={(data: PagesModal) => {
-          AddPage.mutateAsync(data);
+          AddNew.mutateAsync(data);
         }}
       />
       <EditFormModal
@@ -266,7 +254,7 @@ export const BasicTable: React.FC = () => {
           editmodaldata !== undefined && handleEdit(data, editmodaldata._id)
         }
         editedValues={editmodaldata}
-        title="Page"
+        title="news"
       />
       <div>
         <Modal

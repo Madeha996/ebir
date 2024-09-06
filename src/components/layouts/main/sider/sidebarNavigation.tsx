@@ -29,35 +29,15 @@ export const sidebarNavigation: SidebarNavigationItem[] = [
     icon: <NftIcon />,
   },
   {
-    title: "common.authPages",
-    key: "auth",
-    icon: <UserOutlined />,
-    children: [
-      {
-        title: "common.login",
-        key: "login",
-        url: "/auth/login",
-      },
-      {
-        title: "common.signUp",
-        key: "singUp",
-        url: "/auth/sign-up",
-      },
-      {
-        title: "common.forgotPass",
-        key: "forgotPass",
-        url: "/auth/forgot-password",
-      },
-      {
-        title: "common.securityCode",
-        key: "securityCode",
-        url: "/auth/security-code",
-      },
-      {
-        title: "common.newPassword",
-        key: "newPass",
-        url: "/auth/new-password",
-      },
-    ],
+    title: "common.news-page",
+    key: "news-page",
+    url: "/news-page",
+    icon: <NftIcon />,
+  },
+  {
+    title: "common.contact-page",
+    key: "contact-page",
+    url: "/contact-page",
+    icon: <NftIcon />,
   },
 ];

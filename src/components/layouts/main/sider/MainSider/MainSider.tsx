@@ -1,19 +1,28 @@
-import React, { useMemo } from 'react';
-import Overlay from '../../../../common/Overlay';
-import { useResponsive } from 'hooks/useResponsive';
-import * as S from './MainSider.styles';
-import { SiderLogo } from '../SiderLogo';
-import SiderMenu from '../SiderMenu/SiderMenu';
+import React, { useMemo } from "react";
+import Overlay from "../../../../common/Overlay";
+import { useResponsive } from "hooks/useResponsive";
+import * as S from "./MainSider.styles";
+import { SiderLogo } from "../SiderLogo";
+import SiderMenu from "../SiderMenu/SiderMenu";
+import { Image, Row } from "antd";
+import Logo from "@app/assets/images/logo.png";
 
 interface MainSiderProps {
   isCollapsed: boolean;
   setCollapsed: (isCollapsed: boolean) => void;
 }
 
-const MainSider: React.FC<MainSiderProps> = ({ isCollapsed, setCollapsed, ...props }) => {
+const MainSider: React.FC<MainSiderProps> = ({
+  isCollapsed,
+  setCollapsed,
+  ...props
+}) => {
   const { isDesktop, mobileOnly, tabletOnly } = useResponsive();
 
-  const isCollapsible = useMemo(() => mobileOnly && tabletOnly, [mobileOnly, tabletOnly]);
+  const isCollapsible = useMemo(
+    () => mobileOnly && tabletOnly,
+    [mobileOnly, tabletOnly]
+  );
 
   const toggleSider = () => setCollapsed(!isCollapsed);
 
@@ -27,7 +36,15 @@ const MainSider: React.FC<MainSiderProps> = ({ isCollapsed, setCollapsed, ...pro
         width={260}
         {...props}
       >
-        <h1>LOGO</h1>
+        <Row justify={"center"}>
+          <Image
+            src={Logo}
+            alt="logo"
+            width={150}
+            style={{ margin: "0 auto" }}
+          />
+        </Row>
+
         <S.SiderContent>
           <SiderMenu setCollapsed={setCollapsed} />
         </S.SiderContent>
