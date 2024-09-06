@@ -1,4 +1,4 @@
-import { PagesModal } from "@app/domain/NotesModal";
+import { PagesModal } from "@app/domain/AppModal";
 import { httpApi } from "./http.api";
 import axios from "axios";
 

@@ -6,7 +6,7 @@ import { Input } from "@app/components/common/inputs/Input/Input";
 import { InputNumber } from "@app/components/common/inputs/InputNumber/InputNumber";
 import { useResetFormOnCloseModal } from "../forms/ControlForm/useResetFormOnCloseModal";
 import { Select } from "@app/components/common/selects/Select/Select.styles";
-import { PagesModal } from "@app/domain/NotesModal";
+import { PagesModal } from "@app/domain/AppModal";
 
 interface AddFormModalProps {
   visible: boolean;

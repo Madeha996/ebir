@@ -4,13 +4,14 @@ import { useTranslation } from "react-i18next";
 import { BaseForm } from "@app/components/common/forms/BaseForm/BaseForm";
 import { Input } from "@app/components/common/inputs/Input/Input";
 import { useResetFormOnCloseModal } from "../forms/ControlForm/useResetFormOnCloseModal";
-import { PagesModal } from "@app/domain/NotesModal";
+import { PagesModal } from "@app/domain/AppModal";
 
 interface EditFormModalProps {
   visible: boolean;
   onCancel: () => void;
   onEdit: (data: PagesModal) => void;
   editedValues: PagesModal | undefined;
+  title?: string;
 }
 
 export const EditFormModal: React.FC<EditFormModalProps> = ({
@@ -18,6 +19,7 @@ export const EditFormModal: React.FC<EditFormModalProps> = ({
   onCancel,
   onEdit,
   editedValues,
+  title,
 }) => {
   const [form] = BaseForm.useForm();
   const { t } = useTranslation();
