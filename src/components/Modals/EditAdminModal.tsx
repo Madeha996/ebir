@@ -4,13 +4,13 @@ import { useTranslation } from "react-i18next";
 import { BaseForm } from "@app/components/common/forms/BaseForm/BaseForm";
 import { Input } from "@app/components/common/inputs/Input/Input";
 import { useResetFormOnCloseModal } from "../forms/ControlForm/useResetFormOnCloseModal";
-import { NewsModal } from "@app/domain/AppModal";
+import { AdminModal } from "@app/domain/AppModal";
 
 interface EditAdminModalProps {
   visible: boolean;
   onCancel: () => void;
-  onEdit: (data: NewsModal) => void;
-  editedValues: NewsModal | undefined;
+  onEdit: (data: AdminModal) => void;
+  editedValues: AdminModal | undefined;
   title?: string;
 }
 
@@ -33,7 +33,7 @@ export const EditAdminModal: React.FC<EditAdminModalProps> = ({
     form.submit();
   };
 
-  const onFinish = (PagesData: NewsModal) => {
+  const onFinish = (PagesData: AdminModal) => {
     onEdit(PagesData);
   };
   return (
@@ -55,7 +55,21 @@ export const EditAdminModal: React.FC<EditAdminModalProps> = ({
           label={t("common.name")}
           rules={[{ required: true, message: t("common.requiredField") }]}
         >
-          <Input value={editedValues?.title} />
+          <Input value={editedValues?.name} />
+        </BaseForm.Item>
+        <BaseForm.Item
+          name="email"
+          label={t("common.email")}
+          rules={[{ required: true, message: t("common.requiredField") }]}
+        >
+          <Input value={editedValues?.email} />
+        </BaseForm.Item>
+        <BaseForm.Item
+          name="password"
+          label={t("common.password")}
+          rules={[{ required: true, message: t("common.requiredField") }]}
+        >
+          <Input value={editedValues?.password} />
         </BaseForm.Item>
       </BaseForm>
     </Modal>

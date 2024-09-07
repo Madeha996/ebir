@@ -1,4 +1,4 @@
-import { NewsModal, PagesModal } from "@app/domain/AppModal";
+import { AdminModal } from "@app/domain/AppModal";
 import { httpApi } from "./http.api";
 import axios from "axios";
 
@@ -27,35 +27,31 @@ const GetAllAdmins = async (
   pageSize: number,
   keyword?: string
 ) => {
-  // return await httpApi.get(
-  //   `${baseURL}?page=${current}&limit=${pageSize}&keyword=${keyword}`
-  // );
   return await axios.get(
     `https://eabir-backend.onrender.com/api/v1/admins?page=${current}&limit=${pageSize}&keyword=${keyword}`
   );
 };
 
-const CreateAdmin = async (title: string) => {
-  // return await httpApi.post(`/files`, {
-  //   name: name,
-  // });
+const CreateAdmin = async (name: string, email: string, password: string) => {
   return await axios.post("https://eabir-backend.onrender.com/api/v1/admins", {
-    title: title,
+    name,
+    email,
+    password,
   });
 };
 
-const UpdateAdmin = async (data: NewsModal) => {
-  // return await httpApi.put(`/files/${data.id}`, {
-  //   name: data.name,
-  // });
+const UpdateAdmin = async (data: AdminModal) => {
   return await axios.put(
     `https://eabir-backend.onrender.com/api/v1/admins/${data?._id}`,
-    { title: data?.title }
+    {
+      name: data?.name,
+      email: data?.email,
+      password: data?.password,
+    }
   );
 };
 
 const DeleteAdmin = async (id: string) => {
-  // return await httpApi.delete(`/files/${id}`);
   return await axios.delete(
     `https://eabir-backend.onrender.com/api/v1/admins/${id}`
   );

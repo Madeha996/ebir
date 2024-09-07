@@ -10,29 +10,29 @@ import { EditFormModal } from "@app/components/Modals/EditFormModal";
 import { Modal } from "@app/components/common/Modal/Modal";
 import { useMutation, useQuery } from "react-query";
 import { notificationController } from "@app/controllers/notificationController";
-import { NewsModal } from "@app/domain/AppModal";
+import { AdminModal } from "@app/domain/AppModal";
 import { Alert } from "@app/components/common/Alert/Alert";
 import { PagesTableData } from "@app/api/pages.api";
 import dayjs from "dayjs";
 import { CURRENT_PAGINATION, PAGE_SIZE_PAGINATION } from "@app/constants/Pages";
 import { useNavigate } from "react-router-dom";
-import { AddNewsModal } from "@app/components/Modals/AddNewsModal";
-import { EditNewsModal } from "@app/components/Modals/EditNewsModal";
 import {
   GetAllAdmins,
   CreateAdmin,
   DeleteAdmin,
   UpdateAdmin,
 } from "@app/api/admin.api";
+import { AddAdminModal } from "@app/components/Modals/AddAdminModal";
+import { EditAdminModal } from "@app/components/Modals/EditAdminModal";
 
 export const AdminBasicTable: React.FC = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const [editmodaldata, setEditmodaldata] = useState<NewsModal | undefined>(
+  const [editmodaldata, setEditmodaldata] = useState<AdminModal | undefined>(
     undefined
   );
   const [deletedmodaldata, setDeletedmodaldata] = useState<
-    NewsModal | undefined
+    AdminModal | undefined
   >(undefined);
   const [tableData, setTableData] = useState<{ data: PagesTableData[] }>({
     data: [],
@@ -102,8 +102,8 @@ export const AdminBasicTable: React.FC = () => {
     refetch();
   }, [isFetched]);
 
-  const AddNew = useMutation((data: NewsModal) =>
-    CreateAdmin(data.title)
+  const AddNew = useMutation((data: AdminModal) =>
+    CreateAdmin(data.name, data.email, data.password)
       .then(() => {
         notificationController.success({
           message: t("common.addPagesSuccessMessage"),
@@ -118,9 +118,9 @@ export const AdminBasicTable: React.FC = () => {
       })
   );
 
-  const editNew = useMutation((data: NewsModal) => UpdateAdmin(data));
+  const editNew = useMutation((data: AdminModal) => UpdateAdmin(data));
 
-  const handleEdit = (data: NewsModal, _id: string) => {
+  const handleEdit = (data: AdminModal, _id: string) => {
     editNew
       .mutateAsync({ ...data, _id })
       .then((data) => {
@@ -192,14 +192,13 @@ export const AdminBasicTable: React.FC = () => {
     {
       title: t("common.name"),
       dataIndex: "name",
-      width: "20%",
+      columnWidth: "20%",
       render: (name: string) => <span>{name}</span>,
     },
     {
       title: t("common.password"),
       dataIndex: "password",
-      width: "20%",
-
+      width: "10%",
       render: (password: string) => <span>{password}</span>,
     },
     {
@@ -226,7 +225,7 @@ export const AdminBasicTable: React.FC = () => {
       title: t("tables.actions"),
       dataIndex: "actions",
       width: "15%",
-      render: (index: number, record: NewsModal) => {
+      render: (index: number, record: AdminModal) => {
         return (
           <Space>
             <Button
@@ -259,14 +258,14 @@ export const AdminBasicTable: React.FC = () => {
       <S.AddUserButton type="default" htmlType="button" onClick={showAddModal}>
         {t("common.add")}
       </S.AddUserButton>
-      <AddNewsModal
+      <AddAdminModal
         visible={isAddVisible}
         onCancel={hideAddModal}
-        onCreate={(data: NewsModal) => {
+        onCreate={(data: AdminModal) => {
           AddNew.mutateAsync(data);
         }}
       />
-      <EditNewsModal
+      <EditAdminModal
         visible={isEditVisible}
         onCancel={hideEditModal}
         onEdit={(data) =>
