@@ -22,6 +22,13 @@ export interface SidebarNavigationItem {
 
 export const sidebarNavigation: SidebarNavigationItem[] = [
   {
+    title: "common.admin-page",
+    key: "admin-page",
+    // TODO use path variable
+    url: "/admin-page",
+    icon: <NftIcon />,
+  },
+  {
     title: "common.pages-managment",
     key: "pages-mangment",
     // TODO use path variable

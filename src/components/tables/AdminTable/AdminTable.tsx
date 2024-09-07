@@ -16,11 +16,16 @@ import { PagesTableData } from "@app/api/pages.api";
 import dayjs from "dayjs";
 import { CURRENT_PAGINATION, PAGE_SIZE_PAGINATION } from "@app/constants/Pages";
 import { useNavigate } from "react-router-dom";
-import { CreateNew, DeleteNew, GetAllNews, UpdateNew } from "@app/api/news.api";
 import { AddNewsModal } from "@app/components/Modals/AddNewsModal";
 import { EditNewsModal } from "@app/components/Modals/EditNewsModal";
+import {
+  GetAllAdmins,
+  CreateAdmin,
+  DeleteAdmin,
+  UpdateAdmin,
+} from "@app/api/admin.api";
 
-export const NewsBasicTable: React.FC = () => {
+export const AdminBasicTable: React.FC = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [editmodaldata, setEditmodaldata] = useState<NewsModal | undefined>(
@@ -73,7 +78,7 @@ export const NewsBasicTable: React.FC = () => {
     ],
     async () => {
       setLoading(true); // Set loading to true before the API request
-      return await GetAllNews(
+      return await GetAllAdmins(
         pagination.current ?? 1,
         pagination.pageSize ?? 10,
         keyWord
@@ -98,7 +103,7 @@ export const NewsBasicTable: React.FC = () => {
   }, [isFetched]);
 
   const AddNew = useMutation((data: NewsModal) =>
-    CreateNew(data.title)
+    CreateAdmin(data.title)
       .then(() => {
         notificationController.success({
           message: t("common.addPagesSuccessMessage"),
@@ -113,7 +118,7 @@ export const NewsBasicTable: React.FC = () => {
       })
   );
 
-  const editNew = useMutation((data: NewsModal) => UpdateNew(data));
+  const editNew = useMutation((data: NewsModal) => UpdateAdmin(data));
 
   const handleEdit = (data: NewsModal, _id: string) => {
     editNew
@@ -149,7 +154,7 @@ export const NewsBasicTable: React.FC = () => {
       });
   };
 
-  const daleteNew = useMutation((id: string) => DeleteNew(id));
+  const daleteNew = useMutation((id: string) => DeleteAdmin(id));
 
   const handleDelete = (id: string) => {
     if (pagination.current) {
@@ -186,8 +191,23 @@ export const NewsBasicTable: React.FC = () => {
     },
     {
       title: t("common.name"),
-      dataIndex: "title",
-      render: (title: string) => <span>{title}</span>,
+      dataIndex: "name",
+      width: "20%",
+      render: (name: string) => <span>{name}</span>,
+    },
+    {
+      title: t("common.password"),
+      dataIndex: "password",
+      width: "20%",
+
+      render: (password: string) => <span>{password}</span>,
+    },
+    {
+      title: t("common.email"),
+      dataIndex: "email",
+      width: "20%",
+
+      render: (email: string) => <span>{email}</span>,
     },
     {
       title: t("common.createdAt"),

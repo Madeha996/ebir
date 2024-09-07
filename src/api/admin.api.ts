@@ -20,9 +20,9 @@ export interface PagesTableData {
   pagination: Pagination;
 }
 
-const baseURL = `/news`;
+const baseURL = `/admins`;
 
-const GetAllNews = async (
+const GetAllAdmins = async (
   current: number,
   pageSize: number,
   keyword?: string
@@ -31,33 +31,33 @@ const GetAllNews = async (
   //   `${baseURL}?page=${current}&limit=${pageSize}&keyword=${keyword}`
   // );
   return await axios.get(
-    `https://eabir-backend.onrender.com/api/v1/news?page=${current}&limit=${pageSize}&keyword=${keyword}`
+    `https://eabir-backend.onrender.com/api/v1/admins?page=${current}&limit=${pageSize}&keyword=${keyword}`
   );
 };
 
-const CreateNew = async (title: string) => {
+const CreateAdmin = async (title: string) => {
   // return await httpApi.post(`/files`, {
   //   name: name,
   // });
-  return await axios.post("https://eabir-backend.onrender.com/api/v1/news", {
+  return await axios.post("https://eabir-backend.onrender.com/api/v1/admins", {
     title: title,
   });
 };
 
-const UpdateNew = async (data: NewsModal) => {
+const UpdateAdmin = async (data: NewsModal) => {
   // return await httpApi.put(`/files/${data.id}`, {
   //   name: data.name,
   // });
   return await axios.put(
-    `https://eabir-backend.onrender.com/api/v1/news/${data?._id}`,
+    `https://eabir-backend.onrender.com/api/v1/admins/${data?._id}`,
     { title: data?.title }
   );
 };
 
-const DeleteNew = async (id: string) => {
+const DeleteAdmin = async (id: string) => {
   // return await httpApi.delete(`/files/${id}`);
   return await axios.delete(
-    `https://eabir-backend.onrender.com/api/v1/news/${id}`
+    `https://eabir-backend.onrender.com/api/v1/admins/${id}`
   );
 };
-export { GetAllNews, CreateNew, UpdateNew, DeleteNew };
+export { GetAllAdmins, UpdateAdmin, CreateAdmin, DeleteAdmin };

@@ -45,15 +45,21 @@ const contactPage = React.lazy(
   () => import("@app/pages/managmentPages/contactUs")
 );
 
+const adminPage = React.lazy(
+  () => import("@app/pages/managmentPages/adminManagment")
+);
+
 export const NFT_DASHBOARD_PATH = "/";
 export const PAGES_MANAGMENT_SETTING = "/pageSetting/:pageId";
 export const NEWS_MANAGMENT = "/news-page";
 export const CONTACT_US = "/contact-page";
+export const ADMIN_MANAGMENT = "/admin-page";
 
 const PagesMangment = withLoading(PagesManagmentPage);
 const PageSetting = withLoading(PageSettingPage);
 const News = withLoading(newsPage);
 const Contact = withLoading(contactPage);
+const Admin = withLoading(adminPage);
 
 const ServerError = withLoading(ServerErrorPage);
 const Error404 = withLoading(Error404Page);
@@ -81,6 +87,7 @@ export const AppRouter: React.FC = () => {
           <Route path={PAGES_MANAGMENT_SETTING} element={<PageSetting />} />
           <Route path={NEWS_MANAGMENT} element={<News />} />
           <Route path={CONTACT_US} element={<Contact />} />
+          <Route path={ADMIN_MANAGMENT} element={<Admin />} />
           <Route path="forms"></Route>
           <Route path="server-error" element={<ServerError />} />
           <Route path="404" element={<Error404 />} />

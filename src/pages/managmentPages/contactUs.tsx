@@ -1,9 +1,12 @@
+import { GetContact } from "@app/api/socialMedia.api";
 import { Card } from "@app/components/common/Card/Card";
 import { BaseButtonsForm } from "@app/components/common/forms/BaseButtonsForm/BaseButtonsForm";
 import { BaseForm } from "@app/components/common/forms/BaseForm/BaseForm";
+import { notificationController } from "@app/controllers/notificationController";
 import { Button, Col, Input, Row, Typography } from "antd";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useQuery } from "react-query";
 const formItemLayout = {
   labelCol: { span: 22 },
   wrapperCol: { span: 22 },
@@ -13,9 +16,35 @@ const ContactUs = () => {
   const [form] = BaseForm.useForm();
   const { t } = useTranslation();
 
+  const [Loading, setLoading] = useState<boolean>(false);
+
   const onFinish = (values: any) => {
     console.log("values", values);
   };
+  const { data, isLoading, refetch, isRefetching, isFetched, error } = useQuery(
+    ["socialmedia"],
+    async () => {
+      // setLoading(true); // Set loading to true before the API request
+      return await GetContact()
+        .then((data) => {
+          // setLoading(false); // Set loading to false after receiving data
+          return data; // Ensure the data is returned for useQuery to process
+        })
+        .catch((err) => {
+          // setLoading(false); // Set loading to false on error
+          notificationController.error({
+            message: err?.message || err.error?.message,
+          });
+          throw err; // Ensure the error is thrown to let useQuery handle it
+        });
+    }
+  );
+
+  console.log("data", data);
+
+  useEffect(() => {
+    refetch();
+  }, [isFetched]);
 
   return (
     <Card>
