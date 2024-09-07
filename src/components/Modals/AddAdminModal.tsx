@@ -3,15 +3,13 @@ import { Modal } from "antd";
 import { useTranslation } from "react-i18next";
 import { BaseForm } from "@app/components/common/forms/BaseForm/BaseForm";
 import { Input } from "@app/components/common/inputs/Input/Input";
-import { InputNumber } from "@app/components/common/inputs/InputNumber/InputNumber";
 import { useResetFormOnCloseModal } from "../forms/ControlForm/useResetFormOnCloseModal";
-import { Select } from "@app/components/common/selects/Select/Select.styles";
-import { PagesModal } from "@app/domain/AppModal";
+import { AdminModal } from "@app/domain/AppModal";
 
 interface AddAdminModalProps {
   visible: boolean;
   onCancel: () => void;
-  onCreate: (data: PagesModal) => void;
+  onCreate: (data: AdminModal) => void;
 }
 
 export const AddAdminModal: React.FC<AddAdminModalProps> = ({
@@ -31,7 +29,7 @@ export const AddAdminModal: React.FC<AddAdminModalProps> = ({
     form.submit();
   };
 
-  const onFinish = (PagesData: PagesModal) => {
+  const onFinish = (PagesData: AdminModal) => {
     onCreate(PagesData);
   };
 
@@ -50,7 +48,21 @@ export const AddAdminModal: React.FC<AddAdminModalProps> = ({
       >
         <BaseForm.Item
           name="name"
-          label={t("common.title")}
+          label={t("common.name")}
+          rules={[{ required: true, message: t("common.requiredField") }]}
+        >
+          <Input />
+        </BaseForm.Item>
+        <BaseForm.Item
+          name="email"
+          label={t("common.email")}
+          rules={[{ required: true, message: t("common.requiredField") }]}
+        >
+          <Input />
+        </BaseForm.Item>
+        <BaseForm.Item
+          name="password"
+          label={t("common.password")}
           rules={[{ required: true, message: t("common.requiredField") }]}
         >
           <Input />
