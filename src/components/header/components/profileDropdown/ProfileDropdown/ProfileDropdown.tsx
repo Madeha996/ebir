@@ -1,28 +1,20 @@
-import React from 'react';
-import { Avatar, Col, Row } from 'antd';
-import { Dropdown } from '@app/components/common/Dropdown/Dropdown';
-import { H6 } from '@app/components/common/typography/H6/H6';
-import { ProfileOverlay } from '../ProfileOverlay/ProfileOverlay';
-import { useAppSelector } from '@app/hooks/reduxHooks';
-import { useResponsive } from '@app/hooks/useResponsive';
-import * as S from './ProfileDropdown.styles';
+import React from "react";
+import { Avatar, Col, Row } from "antd";
+import { Dropdown } from "@app/components/common/Dropdown/Dropdown";
+import { H6 } from "@app/components/common/typography/H6/H6";
+import { ProfileOverlay } from "../ProfileOverlay/ProfileOverlay";
+import { useAppSelector } from "@app/hooks/reduxHooks";
+import { useResponsive } from "@app/hooks/useResponsive";
+import * as S from "./ProfileDropdown.styles";
+import { LogoutOutlined } from "@ant-design/icons";
 
 export const ProfileDropdown: React.FC = () => {
-  const { isTablet } = useResponsive();
+  const token = useAppSelector((state) => state.auth.token);
 
-  const user = useAppSelector((state) => state.user.user);
-
-  return user ? (
-    <Dropdown overlay={<ProfileOverlay />} trigger={['click']}>
+  return token ? (
+    <Dropdown overlay={<ProfileOverlay />} trigger={["click"]}>
       <S.ProfileDropdownHeader as={Row} gutter={[10, 10]} align="middle">
-        <Col>
-          <Avatar src={user.imgUrl} alt="User" shape="circle" size={40} />
-        </Col>
-        {isTablet && (
-          <Col>
-            <H6>{`${user.firstName} ${user.lastName[0]}`}</H6>
-          </Col>
-        )}
+        <LogoutOutlined style={{ fontSize: "25px" }} />
       </S.ProfileDropdownHeader>
     </Dropdown>
   ) : null;

@@ -1,6 +1,7 @@
-import { httpApi } from '@app/api/http.api';
-import './mocks/auth.api.mock';
-import { UserModel } from '@app/domain/UserModel';
+import { httpApi } from "@app/api/http.api";
+import "./mocks/auth.api.mock";
+import { UserModel } from "@app/domain/UserModel";
+import axios from "axios";
 
 export interface AuthData {
   email: string;
@@ -37,16 +38,14 @@ export interface LoginResponse {
 }
 
 export const login = (loginPayload: LoginRequest): Promise<LoginResponse> =>
-  httpApi.post<LoginResponse>('login', { ...loginPayload }).then(({ data }) => data);
-
-export const signUp = (signUpData: SignUpRequest): Promise<undefined> =>
-  httpApi.post<undefined>('signUp', { ...signUpData }).then(({ data }) => data);
-
-export const resetPassword = (resetPasswordPayload: ResetPasswordRequest): Promise<undefined> =>
-  httpApi.post<undefined>('forgotPassword', { ...resetPasswordPayload }).then(({ data }) => data);
-
-export const verifySecurityCode = (securityCodePayload: SecurityCodePayload): Promise<undefined> =>
-  httpApi.post<undefined>('verifySecurityCode', { ...securityCodePayload }).then(({ data }) => data);
-
-export const setNewPassword = (newPasswordData: NewPasswordData): Promise<undefined> =>
-  httpApi.post<undefined>('setNewPassword', { ...newPasswordData }).then(({ data }) => data);
+  axios
+    .post<LoginResponse>(
+      `https://eabir-backend.onrender.com/api/v1/login`,
+      loginPayload
+    )
+    .then(({ data }) => data)
+    .catch((error) => {
+      // Handle error
+      console.error("Login failed:", error);
+      throw error;
+    });
