@@ -1,62 +1,47 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+// authSlice.ts
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { login, LoginRequest } from "@app/api/auth.api";
+import { setUser } from "@app/store/slices/userSlice";
 import {
-  ResetPasswordRequest,
-  login,
-  LoginRequest,
-  signUp,
-  SignUpRequest,
-  resetPassword,
-  verifySecurityCode,
-  SecurityCodePayload,
-  NewPasswordData,
-  setNewPassword,
-} from '@app/api/auth.api';
-import { setUser } from '@app/store/slices/userSlice';
-import { deleteToken, deleteUser, persistToken, readToken } from '@app/services/localStorage.service';
+  deleteToken,
+  deleteUser,
+  persistToken,
+} from "@app/services/localStorage.service";
 
 export interface AuthSlice {
   token: string | null;
 }
 
 const initialState: AuthSlice = {
-  token: readToken(),
+  token: null,
 };
 
-export const doLogin = createAsyncThunk('auth/doLogin', async (loginPayload: LoginRequest, { dispatch }) =>
-  login(loginPayload).then((res) => {
-    dispatch(setUser(res.user));
-    persistToken(res.token);
-
-    return res.token;
-  }),
+export const doLogin = createAsyncThunk(
+  "auth/doLogin",
+  async (loginPayload: LoginRequest, { dispatch, rejectWithValue }) => {
+    try {
+      const res = await login(loginPayload);
+      dispatch(setUser(res.user));
+      persistToken(res.token);
+      return res.token;
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data?.message || "Login failed");
+    }
+  }
 );
 
-export const doSignUp = createAsyncThunk('auth/doSignUp', async (signUpPayload: SignUpRequest) =>
-  signUp(signUpPayload),
+export const doLogout = createAsyncThunk(
+  "auth/doLogout",
+  async (_, { dispatch }) => {
+    deleteToken();
+    deleteUser();
+    dispatch(setUser(null));
+    return null; // Ensure the promise resolves with null
+  }
 );
-
-export const doResetPassword = createAsyncThunk(
-  'auth/doResetPassword',
-  async (resetPassPayload: ResetPasswordRequest) => resetPassword(resetPassPayload),
-);
-
-export const doVerifySecurityCode = createAsyncThunk(
-  'auth/doVerifySecurityCode',
-  async (securityCodePayload: SecurityCodePayload) => verifySecurityCode(securityCodePayload),
-);
-
-export const doSetNewPassword = createAsyncThunk('auth/doSetNewPassword', async (newPasswordData: NewPasswordData) =>
-  setNewPassword(newPasswordData),
-);
-
-export const doLogout = createAsyncThunk('auth/doLogout', (payload, { dispatch }) => {
-  deleteToken();
-  deleteUser();
-  dispatch(setUser(null));
-});
 
 const authSlice = createSlice({
-  name: 'auth',
+  name: "auth",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -64,7 +49,7 @@ const authSlice = createSlice({
       state.token = action.payload;
     });
     builder.addCase(doLogout.fulfilled, (state) => {
-      state.token = '';
+      state.token = null; // Correctly update token to null on logout
     });
   },
 });

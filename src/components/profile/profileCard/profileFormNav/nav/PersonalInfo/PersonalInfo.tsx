@@ -64,23 +64,7 @@ export const PersonalInfo: React.FC = () => {
     () =>
       user
         ? {
-            firstName: user.firstName,
-            lastName: user.lastName,
-            email: user.email.name,
-            phone: user.phone.number,
-            nickname: user.userName,
-            sex: user.sex,
-            birthday: Dates.getDate(user.birthday),
-            language: user.lang,
-            country: user.country,
-            city: user.city,
-            address1: user.address1,
-            address2: user?.address2,
-            zipcode: user.zipcode,
-            website: user?.website,
-            twitter: user?.socials?.twitter,
-            linkedin: user?.socials?.linkedin,
-            facebook: user?.socials?.facebook,
+            name: user.name,
           }
         : initialPersonalInfoValues,
     [user]
@@ -147,10 +131,6 @@ export const PersonalInfo: React.FC = () => {
                 {t("profile.nav.personalInfo.contactInfo")}
               </BaseButtonsForm.Title>
             </BaseButtonsForm.Item>
-          </Col>
-
-          <Col xs={24} md={12}>
-            <PhoneItem verified={user?.phone.verified} />
           </Col>
 
           <Col xs={24} md={12}>
