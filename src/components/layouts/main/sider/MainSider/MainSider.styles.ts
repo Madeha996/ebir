@@ -12,9 +12,6 @@ export const Sider = styled(Layout.Sider)`
   min-height: 100vh;
   max-height: 100vh;
 
-  /* Gradient background */
-  background: linear-gradient(180deg, #499f8b 0%, #416ea3 100%);
-
   color: var(--text-secondary-color);
 
   @media only screen and ${media.md} {
@@ -28,12 +25,9 @@ export const Sider = styled(Layout.Sider)`
 `;
 
 export const CollapseButton = styled(Button)<{ $isCollapsed: boolean }>`
-  background: linear-gradient(
-    135deg,
-    #499f8b 0%,
-    #416ea3 100%
-  ); /* Gradient background */
-  border: 1px solid transparent; /* Transparent border to blend with gradient */
+  background: var(--collapse-background-color);
+
+  border: 1px solid var(--border-color);
   transition: all 0.2s ease;
   position: absolute;
   right: 0.5rem;
@@ -48,22 +42,14 @@ export const CollapseButton = styled(Button)<{ $isCollapsed: boolean }>`
 
   &:hover {
     color: var(--text-secondary-color);
-    background: linear-gradient(
-      135deg,
-      #416ea3 0%,
-      #499f8b 100%
-    ); /* Inverse gradient on hover */
-    border: 1px solid var(--border-color); /* Change border color on hover */
+    background: var(--primary-color);
+    border: 1px solid var(--border-color);
   }
 
   &:focus {
     color: var(--text-secondary-color);
-    background: linear-gradient(
-      135deg,
-      #416ea3 0%,
-      #499f8b 100%
-    ); /* Inverse gradient on focus */
-    border: 1px solid var(--border-color); /* Change border color on focus */
+    background: var(--primary-color);
+    border: 1px solid var(--border-color);
   }
 `;
 
@@ -90,9 +76,6 @@ export const SiderLogoDiv = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-
-  /* Gradient background */
-  background: linear-gradient(180deg, #499f8b 0%, #416ea3 100%);
 
   @media only screen and ${media.md} {
     height: ${LAYOUT.desktop.headerHeight};

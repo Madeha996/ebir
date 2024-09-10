@@ -96,15 +96,23 @@ export const BasicTable: React.FC = () => {
           });
           throw err; // Ensure the error is thrown to let useQuery handle it
         });
+    },
+    {
+      keepPreviousData: true,
+      refetchOnWindowFocus: false,
+      onError: (err: any) => {
+        notificationController.error({
+          message: err?.message || "An error occurred",
+        });
+      },
     }
-    // {
-    //   enabled: refetchOnAddPage, // Prevent refetching if already fetching
-    // }
   );
 
-  useEffect(() => {
-    refetch();
-  }, [isFetched]);
+  // console.log("data", data);
+
+  // useEffect(() => {
+  //   refetch();
+  // }, [isFetched]);
 
   const AddPage = useMutation((data: PagesModal) =>
     CreatePage(data.name)
