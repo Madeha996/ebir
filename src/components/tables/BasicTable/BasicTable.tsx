@@ -50,6 +50,7 @@ export const BasicTable: React.FC = () => {
   const [refetchOnAddPage, setRefetchOnAddPage] = useState(false);
   const [refetchOnEditPage, setRefetchOnEditPage] = useState(false);
   const [refetchOnDeletePage, setRefetchOnDeletePage] = useState(false);
+  const [total, setTotal] = useState();
 
   const showAddModal = () => {
     setIsAddVisible(true);
@@ -83,6 +84,7 @@ export const BasicTable: React.FC = () => {
         keyWord
       )
         .then((data) => {
+          setTotal(data?.data?.total);
           setTableData(data?.data);
           setLoading(false); // Set loading to false after receiving data
           return data; // Ensure the data is returned for useQuery to process
@@ -296,7 +298,7 @@ export const BasicTable: React.FC = () => {
               pageSize: pageSize,
             });
           },
-          total: 20,
+          total: total,
         }}
         // loading={loading}
         // onChange={handleTableChange}

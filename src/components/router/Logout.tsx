@@ -5,22 +5,14 @@ import { doLogout } from "@app/store/slices/authSlice";
 
 const Logout: React.FC = () => {
   const dispatch = useAppDispatch();
-  const [isLoggingOut, setIsLoggingOut] = useState(true);
+  const [isLoggedOut, setIsLoggedOut] = useState(false); // Change the state to track if logged out
 
   useEffect(() => {
-    const logout = async () => {
-      try {
-        await dispatch(doLogout()).unwrap();
-        setIsLoggingOut(false);
-      } catch (error) {
-        setIsLoggingOut(false);
-      }
-    };
-
-    logout();
+    dispatch(doLogout());
+    setIsLoggedOut(true); // Mark as logged out immediately after dispatch
   }, [dispatch]);
 
-  if (isLoggingOut) {
+  if (!isLoggedOut) {
     return <p>Logging out...</p>; // Optionally show a loading indicator
   }
 

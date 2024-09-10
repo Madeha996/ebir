@@ -63,7 +63,7 @@ const PageSettingPage: React.FC = () => {
     (data: FormData) => UploadAttachment(data),
     {
       onSuccess: () => {
-        message.success(t("Pagess.editPagesSuccessMessage"));
+        // message.success(t("Pagess.editPagesSuccessMessage"));
         refetch();
       },
       onError: (error: any) => {

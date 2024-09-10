@@ -1,7 +1,6 @@
 import { httpApi } from "@app/api/http.api";
 import "./mocks/auth.api.mock";
 import { UserModel } from "@app/domain/UserModel";
-import axios from "axios";
 
 export interface AuthData {
   email: string;
@@ -38,14 +37,9 @@ export interface LoginResponse {
 }
 
 export const login = (loginPayload: LoginRequest): Promise<LoginResponse> =>
-  axios
-    .post<LoginResponse>(
-      `https://eabir-backend.onrender.com/api/v1/login`,
-      loginPayload
-    )
+  httpApi
+    .post<LoginResponse>(`login`, loginPayload)
     .then(({ data }) => data)
     .catch((error) => {
-      // Handle error
-      console.error("Login failed:", error);
       throw error;
     });
