@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { message, Space } from "antd";
 import { Pagination } from "@app/api/pages.api";
 import { Table } from "components/common/Table/Table";
 import { Button } from "components/common/buttons/Button/Button";
 import { useTranslation } from "react-i18next";
-import { AddFormModal } from "@app/components/Modals/AddFormModal";
-import * as S from "@app/components/forms/ControlForm/ControlForm.styles";
-import { EditFormModal } from "@app/components/Modals/EditFormModal";
+import { AddAdminModal } from "@app/components/Modals/AddAdminModal";
+import { EditAdminModal } from "@app/components/Modals/EditAdminModal";
 import { Modal } from "@app/components/common/Modal/Modal";
 import { useMutation, useQuery } from "react-query";
 import { notificationController } from "@app/controllers/notificationController";
@@ -15,19 +14,16 @@ import { Alert } from "@app/components/common/Alert/Alert";
 import { PagesTableData } from "@app/api/pages.api";
 import dayjs from "dayjs";
 import { CURRENT_PAGINATION, PAGE_SIZE_PAGINATION } from "@app/constants/Pages";
-import { useNavigate } from "react-router-dom";
 import {
   GetAllAdmins,
   CreateAdmin,
   DeleteAdmin,
   UpdateAdmin,
 } from "@app/api/admin.api";
-import { AddAdminModal } from "@app/components/Modals/AddAdminModal";
-import { EditAdminModal } from "@app/components/Modals/EditAdminModal";
+import * as S from "@app/components/forms/ControlForm/ControlForm.styles";
 
 export const AdminBasicTable: React.FC = () => {
   const { t } = useTranslation();
-  const navigate = useNavigate();
   const [editmodaldata, setEditmodaldata] = useState<AdminModal | undefined>(
     undefined
   );
@@ -44,63 +40,32 @@ export const AdminBasicTable: React.FC = () => {
   const [isAddVisible, setIsAddVisible] = useState<boolean>(false);
   const [isEditVisible, setIsEditVisible] = useState<boolean>(false);
   const [isDeleteVisible, setIsDeleteVisible] = useState<boolean>(false);
-  const [isEdit, setIsEdit] = useState<boolean>(false);
-  const [isDelete, setIsDelete] = useState<boolean>(false);
   const [keyWord, setKeyWord] = useState<string>("");
-  const [loading, setLoading] = useState(true);
-  const [refetchOnAddNew, setRefetchOnAddNew] = useState(false);
-  const [refetchOnEditNew, setRefetchOnEditNew] = useState(false);
-  const [refetchOnDeleteNew, setRefetchOnDeleteNew] = useState(false);
+  const [total, setTotal] = useState<number>();
 
-  const showAddModal = () => {
-    setIsAddVisible(true);
-  };
-  const hideAddModal = () => {
-    setIsAddVisible(false);
-  };
-  const showEditModal = () => {
-    setIsEditVisible(true);
-  };
-  const hideEditModal = () => {
-    setIsEditVisible(false);
-  };
+  const showAddModal = () => setIsAddVisible(true);
+  const hideAddModal = () => setIsAddVisible(false);
+  const showEditModal = () => setIsEditVisible(true);
+  const hideEditModal = () => setIsEditVisible(false);
 
-  const { data, isLoading, refetch, isRefetching, isFetched, error } = useQuery(
-    [
-      "pages",
-      pagination.current,
-      pagination.pageSize,
-      isDelete,
-      isEdit,
-      refetchOnAddNew,
-      refetchOnEditNew,
-      refetchOnDeleteNew,
-    ],
-    async () => {
-      setLoading(true); // Set loading to true before the API request
-      return await GetAllAdmins(
-        pagination.current ?? 1,
-        pagination.pageSize ?? 10,
-        keyWord
-      )
-        .then((data) => {
-          setTableData(data?.data);
-          setLoading(false); // Set loading to false after receiving data
-          return data; // Ensure the data is returned for useQuery to process
-        })
-        .catch((err) => {
-          setLoading(false); // Set loading to false on error
-          notificationController.error({
-            message: err?.message || err.error?.message,
-          });
-          throw err; // Ensure the error is thrown to let useQuery handle it
+  const { data, isLoading, refetch, isFetching, error } = useQuery(
+    ["pages", pagination.current, pagination.pageSize, keyWord],
+    () =>
+      GetAllAdmins(pagination.current ?? 1, pagination.pageSize ?? 5, keyWord),
+    {
+      onSuccess: (data) => {
+        setTotal(data?.data?.total);
+        setTableData(data?.data);
+      },
+      onError: (err: any) => {
+        notificationController.error({
+          message: err?.message || err.error?.message,
         });
+      },
+      refetchOnWindowFocus: false, // Prevent refetching on window focus
+      keepPreviousData: true, // Optionally keep previous data while refetching
     }
   );
-
-  useEffect(() => {
-    refetch();
-  }, [isFetched]);
 
   const AddNew = useMutation((data: AdminModal) =>
     CreateAdmin(data.name, data.email, data.password)
@@ -109,7 +74,7 @@ export const AdminBasicTable: React.FC = () => {
           message: t("common.addPagesSuccessMessage"),
         });
         setIsAddVisible(false);
-        setRefetchOnAddNew(true);
+        refetch(); // Trigger a refetch after adding a new admin
       })
       .catch((error) => {
         notificationController.error({
@@ -123,10 +88,9 @@ export const AdminBasicTable: React.FC = () => {
   const handleEdit = (data: AdminModal, _id: string) => {
     editNew
       .mutateAsync({ ...data, _id })
-      .then((data) => {
-        setIsEdit(data.data?.success);
+      .then(() => {
         setIsEditVisible(false);
-        setRefetchOnEditNew(true);
+        refetch(); // Trigger a refetch after editing an admin
         message.open({
           content: (
             <Alert
@@ -147,39 +111,25 @@ export const AdminBasicTable: React.FC = () => {
             />
           ),
         });
-      })
-      .finally(() => {
-        setLoading(false);
-        setRefetchOnEditNew(false);
       });
   };
 
-  const daleteNew = useMutation((id: string) => DeleteAdmin(id));
+  const deleteNew = useMutation((id: string) => DeleteAdmin(id));
 
   const handleDelete = (id: string) => {
-    if (pagination.current) {
-      if (pagination.current > 1 && tableData?.data?.length === 1) {
-        daleteNew.mutateAsync(id);
-        setPagination({ ...pagination, current: pagination.current - 1 });
-        setLoading(true);
-      } else {
-        daleteNew
-          .mutateAsync(id)
-          .then(() => {
-            notificationController.success({
-              message: t("common.deletePagesSuccessMessage"),
-            });
-            setIsAddVisible(false);
-            setRefetchOnDeleteNew(true);
-          })
-          .catch((error) => {
-            notificationController.error({
-              message: error.message || error.error?.message,
-            });
-          })
-          .finally(() => setLoading(false));
-      }
-    }
+    deleteNew
+      .mutateAsync(id)
+      .then(() => {
+        notificationController.success({
+          message: t("common.deletePagesSuccessMessage"),
+        });
+        refetch(); // Trigger a refetch after deleting an admin
+      })
+      .catch((error) => {
+        notificationController.error({
+          message: error.message || error.error?.message,
+        });
+      });
   };
 
   const columns = [
@@ -196,16 +146,9 @@ export const AdminBasicTable: React.FC = () => {
       render: (name: string) => <span>{name}</span>,
     },
     {
-      title: t("common.password"),
-      dataIndex: "password",
-      width: "10%",
-      render: (password: string) => <span>{password}</span>,
-    },
-    {
       title: t("common.email"),
       dataIndex: "email",
       width: "20%",
-
       render: (email: string) => <span>{email}</span>,
     },
     {
@@ -220,7 +163,6 @@ export const AdminBasicTable: React.FC = () => {
       width: "10%",
       render: (date: string) => <span>{dayjs(date).format("YYYY-MM-DD")}</span>,
     },
-
     {
       title: t("tables.actions"),
       dataIndex: "actions",
@@ -282,7 +224,6 @@ export const AdminBasicTable: React.FC = () => {
           onOk={() => {
             deletedmodaldata?._id && handleDelete(deletedmodaldata?._id);
             setIsDeleteVisible(false);
-            setIsDelete(true);
           }}
           onCancel={() => setIsDeleteVisible(false)}
           size="small"
@@ -302,13 +243,9 @@ export const AdminBasicTable: React.FC = () => {
               pageSize: pageSize,
             });
           },
-          total: 20,
+          total: total,
         }}
-        // loading={loading}
-        // onChange={handleTableChange}
-        scroll={{ x: 800 }}
-        bordered
-        loading={loading}
+        loading={isLoading || isFetching}
       />
     </>
   );

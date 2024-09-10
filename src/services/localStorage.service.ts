@@ -4,11 +4,10 @@ const avatarImg = process.env.REACT_APP_ASSETS_BUCKET + "/avatars/avatar5.webp";
 // Default user for fallback
 const testUser: UserModel = {
   id: 1,
-
-  name: "@john1989",
+  name: "",
   email: {
-    name: "user@ebir.com",
-    verified: true,
+    name: "",
+    verified: false,
   },
 };
 

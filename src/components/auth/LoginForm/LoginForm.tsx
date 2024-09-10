@@ -13,11 +13,6 @@ interface LoginFormData {
   password: string;
 }
 
-export const initValues: LoginFormData = {
-  email: "hello@ebir.com",
-  password: "some-test-pass",
-};
-
 export const LoginForm: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -42,7 +37,6 @@ export const LoginForm: React.FC = () => {
         layout="vertical"
         onFinish={handleSubmit}
         requiredMark="optional"
-        initialValues={initValues}
       >
         <Auth.FormTitle>{t("common.login")}</Auth.FormTitle>
         <S.LoginDescription>{t("login.loginInfo")}</S.LoginDescription>

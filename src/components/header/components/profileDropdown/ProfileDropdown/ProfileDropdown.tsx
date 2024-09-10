@@ -7,9 +7,10 @@ import { useAppSelector } from "@app/hooks/reduxHooks";
 import { useResponsive } from "@app/hooks/useResponsive";
 import * as S from "./ProfileDropdown.styles";
 import { LogoutOutlined } from "@ant-design/icons";
+import { readToken } from "@app/services/localStorage.service";
 
 export const ProfileDropdown: React.FC = () => {
-  const token = useAppSelector((state) => state.auth.token);
+  const token = useAppSelector((state) => state.auth?.token || readToken());
 
   return token ? (
     <Dropdown overlay={<ProfileOverlay />} trigger={["click"]}>

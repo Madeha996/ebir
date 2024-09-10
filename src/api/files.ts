@@ -1,5 +1,4 @@
 import { httpApi } from "./http.api";
-import axios from "axios";
 
 const baseURL = `/files`;
 
@@ -8,47 +7,29 @@ const GetAttachments = async (
   limit: number,
   keyword: string
 ) => {
-  // return await httpApi.get(`${baseURL}?files=${files}&limit=${limit}&keyword=${keyword}`)
-  return await axios.get(
-    `https://eabir-backend.onrender.com/api/v1/files?files=${files}&limit=${limit}&keyword=${keyword}`
+  return await httpApi.get(
+    `files?files=${files}&limit=${limit}&keyword=${keyword}`
   );
 };
 
 const UploadAttachment = async (file: FormData) => {
-  // return await httpApi.post(`${baseURL}`, {
-  //   file,
-  // });
-  return await axios.post(
-    "https://eabir-backend.onrender.com/api/v1/files",
-    file
-  );
+  return await httpApi.post("files", file);
 };
 
 const UpdateAttachment = async (id: string, name: string) => {
-  return await axios.put(
-    `https://eabir-backend.onrender.com/api/v1/pages/${id}`,
-    { name }
-  );
+  return await httpApi.put(`pages/${id}`, { name });
 };
 
 const GetAttachmentById = async (id: string) => {
-  // return await httpApi.get(`${baseURL}/${id}`)
-  return await axios.get(
-    `https://eabir-backend.onrender.com/api/v1/files/${id}`
-  );
+  return await httpApi.get(`files/${id}`);
 };
 
 const GetAttachmentByPageId = async (pageId: string) => {
-  // return await httpApi.get(`${baseURL}/${pageId}`)
-  return await axios.get(
-    `https://eabir-backend.onrender.com/api/v1/files/page/${pageId}`
-  );
+  return await httpApi.get(`files/page/${pageId}`);
 };
 
 const DeleteAttachment = async (id: string) => {
-  return await axios.delete(
-    `https://eabir-backend.onrender.com/api/v1/files/${id}`
-  );
+  return await httpApi.delete(`files/${id}`);
 };
 
 const EditAttachment = async (
@@ -56,10 +37,7 @@ const EditAttachment = async (
   title: string,
   description?: string
 ) => {
-  return await axios.put(
-    `https://eabir-backend.onrender.com/api/v1/files/${fileId}`,
-    { title }
-  );
+  return await httpApi.put(`files/${fileId}`, { title });
 };
 
 export {

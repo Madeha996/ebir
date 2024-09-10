@@ -37,7 +37,6 @@ const UploadComponent = ({
         multiple
         action={"http://localhost:3000/"}
         listType="picture"
-        // accept={accept}
         fileList={fileList}
         // beforeUpload={handleBeforeUpload}
         showUploadList={false}
