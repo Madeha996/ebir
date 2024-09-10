@@ -2,7 +2,6 @@ import React, { useMemo } from "react";
 import Overlay from "../../../../common/Overlay";
 import { useResponsive } from "hooks/useResponsive";
 import * as S from "./MainSider.styles";
-import { SiderLogo } from "../SiderLogo";
 import SiderMenu from "../SiderMenu/SiderMenu";
 import { Image, Row } from "antd";
 import Logo from "@app/assets/images/logo.png";
@@ -41,6 +40,7 @@ const MainSider: React.FC<MainSiderProps> = ({
             src={Logo}
             alt="logo"
             width={150}
+            preview={false}
             style={{ margin: "0 auto" }}
           />
         </Row>

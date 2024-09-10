@@ -19,7 +19,6 @@ export const EditAdminModal: React.FC<EditAdminModalProps> = ({
   onCancel,
   onEdit,
   editedValues,
-  title,
 }) => {
   const [form] = BaseForm.useForm();
   const { t } = useTranslation();
@@ -38,7 +37,7 @@ export const EditAdminModal: React.FC<EditAdminModalProps> = ({
   };
   return (
     <Modal
-      title={t("common.editPage")}
+      title={t("common.editAdmin")}
       visible={visible}
       onOk={onOk}
       onCancel={onCancel}
@@ -51,7 +50,7 @@ export const EditAdminModal: React.FC<EditAdminModalProps> = ({
         initialValues={editedValues}
       >
         <BaseForm.Item
-          name="title"
+          name="name"
           label={t("common.name")}
           rules={[{ required: true, message: t("common.requiredField") }]}
         >
@@ -69,7 +68,7 @@ export const EditAdminModal: React.FC<EditAdminModalProps> = ({
           label={t("common.password")}
           rules={[{ required: true, message: t("common.requiredField") }]}
         >
-          <Input value={editedValues?.password} />
+          <Input />
         </BaseForm.Item>
       </BaseForm>
     </Modal>

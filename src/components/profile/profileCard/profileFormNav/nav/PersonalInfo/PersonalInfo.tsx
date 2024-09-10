@@ -133,10 +133,6 @@ export const PersonalInfo: React.FC = () => {
             </BaseButtonsForm.Item>
           </Col>
 
-          <Col xs={24} md={12}>
-            <EmailItem verified={user?.email.verified} />
-          </Col>
-
           <Col span={24}>
             <BaseButtonsForm.Item>
               <BaseButtonsForm.Title>

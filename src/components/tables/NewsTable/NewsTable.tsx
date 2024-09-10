@@ -46,6 +46,7 @@ export const NewsBasicTable: React.FC = () => {
   const [refetchOnAddNew, setRefetchOnAddNew] = useState(false);
   const [refetchOnEditNew, setRefetchOnEditNew] = useState(false);
   const [refetchOnDeleteNew, setRefetchOnDeleteNew] = useState(false);
+  const [total, setTotal] = useState();
 
   const showAddModal = () => {
     setIsAddVisible(true);
@@ -61,54 +62,46 @@ export const NewsBasicTable: React.FC = () => {
   };
 
   const { data, isLoading, refetch, isRefetching, isFetched, error } = useQuery(
-    [
-      "pages",
-      pagination.current,
-      pagination.pageSize,
-      isDelete,
-      isEdit,
-      refetchOnAddNew,
-      refetchOnEditNew,
-      refetchOnDeleteNew,
-    ],
+    ["news", pagination.current, pagination.pageSize, keyWord],
     async () => {
-      setLoading(true); // Set loading to true before the API request
-      return await GetAllNews(
+      const response = await GetAllNews(
         pagination.current ?? 1,
         pagination.pageSize ?? 10,
         keyWord
-      )
-        .then((data) => {
-          setTableData(data?.data);
-          setLoading(false); // Set loading to false after receiving data
-          return data; // Ensure the data is returned for useQuery to process
-        })
-        .catch((err) => {
-          setLoading(false); // Set loading to false on error
-          notificationController.error({
-            message: err?.message || err.error?.message,
-          });
-          throw err; // Ensure the error is thrown to let useQuery handle it
+      );
+      setTotal(response?.data?.total ?? 0);
+      setTableData(response?.data ?? { data: [] });
+      return response;
+    },
+    {
+      keepPreviousData: true,
+      refetchOnWindowFocus: false,
+      onError: (err: any) => {
+        notificationController.error({
+          message: err?.message || "An error occurred",
         });
+      },
     }
   );
 
   useEffect(() => {
-    refetch();
-  }, [isFetched]);
+    if (isFetched) {
+      refetch();
+    }
+  }, [isFetched, refetch]);
 
   const AddNew = useMutation((data: NewsModal) =>
     CreateNew(data.title)
       .then(() => {
         notificationController.success({
-          message: t("common.addPagesSuccessMessage"),
+          message: t("common.addNewSuccessMessage"),
         });
         setIsAddVisible(false);
-        setRefetchOnAddNew(true);
+        refetch();
       })
       .catch((error) => {
         notificationController.error({
-          message: error.message || error.error?.message,
+          message: error.message || "An error occurred",
         });
       })
   );
@@ -118,10 +111,9 @@ export const NewsBasicTable: React.FC = () => {
   const handleEdit = (data: NewsModal, _id: string) => {
     editNew
       .mutateAsync({ ...data, _id })
-      .then((data) => {
-        setIsEdit(data.data?.success);
+      .then(() => {
         setIsEditVisible(false);
-        setRefetchOnEditNew(true);
+        refetch();
         message.open({
           content: (
             <Alert
@@ -136,45 +128,32 @@ export const NewsBasicTable: React.FC = () => {
         message.open({
           content: (
             <Alert
-              message={error.error?.message || error.message}
+              message={error.message || "An error occurred"}
               type={`error`}
               showIcon
             />
           ),
         });
-      })
-      .finally(() => {
-        setLoading(false);
-        setRefetchOnEditNew(false);
       });
   };
 
-  const daleteNew = useMutation((id: string) => DeleteNew(id));
+  const deleteNew = useMutation((id: string) => DeleteNew(id));
 
   const handleDelete = (id: string) => {
-    if (pagination.current) {
-      if (pagination.current > 1 && tableData?.data?.length === 1) {
-        daleteNew.mutateAsync(id);
-        setPagination({ ...pagination, current: pagination.current - 1 });
-        setLoading(true);
-      } else {
-        daleteNew
-          .mutateAsync(id)
-          .then(() => {
-            notificationController.success({
-              message: t("common.deletePagesSuccessMessage"),
-            });
-            setIsAddVisible(false);
-            setRefetchOnDeleteNew(true);
-          })
-          .catch((error) => {
-            notificationController.error({
-              message: error.message || error.error?.message,
-            });
-          })
-          .finally(() => setLoading(false));
-      }
-    }
+    deleteNew
+      .mutateAsync(id)
+      .then(() => {
+        notificationController.success({
+          message: t("common.deleteNewSuccessMessage"),
+        });
+        setIsDeleteVisible(false);
+        refetch();
+      })
+      .catch((error) => {
+        notificationController.error({
+          message: error.message || "An error occurred",
+        });
+      });
   };
 
   const columns = [
@@ -201,7 +180,6 @@ export const NewsBasicTable: React.FC = () => {
       width: "10%",
       render: (date: string) => <span>{dayjs(date).format("YYYY-MM-DD")}</span>,
     },
-
     {
       title: t("tables.actions"),
       dataIndex: "actions",
@@ -262,8 +240,6 @@ export const NewsBasicTable: React.FC = () => {
           visible={isDeleteVisible}
           onOk={() => {
             deletedmodaldata?._id && handleDelete(deletedmodaldata?._id);
-            setIsDeleteVisible(false);
-            setIsDelete(true);
           }}
           onCancel={() => setIsDeleteVisible(false)}
           size="small"
@@ -283,13 +259,11 @@ export const NewsBasicTable: React.FC = () => {
               pageSize: pageSize,
             });
           },
-          total: 20,
+          total: total,
         }}
-        // loading={loading}
-        // onChange={handleTableChange}
         scroll={{ x: 800 }}
         bordered
-        loading={loading}
+        loading={isLoading || isRefetching}
       />
     </>
   );
