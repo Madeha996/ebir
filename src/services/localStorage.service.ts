@@ -1,15 +1,4 @@
 import { UserModel } from "@app/domain/UserModel";
-const avatarImg = process.env.REACT_APP_ASSETS_BUCKET + "/avatars/avatar5.webp";
-
-// Default user for fallback
-const testUser: UserModel = {
-  id: 1,
-  name: "",
-  email: {
-    name: "",
-    verified: false,
-  },
-};
 
 // Persist access token
 export const persistToken = (token: string): void => {
@@ -17,8 +6,8 @@ export const persistToken = (token: string): void => {
 };
 
 // Read access token from local storage
-export const readToken = (): string => {
-  return localStorage.getItem("accessToken") || "bearerToken";
+export const readToken = (): string | null => {
+  return localStorage.getItem("accessToken");
 };
 
 // Persist user object into local storage
@@ -32,21 +21,8 @@ export const readUser = (): UserModel | null => {
 
   if (userStr) {
     try {
-      const parsedUser = JSON.parse(userStr);
-
-      // Validate and ensure 'sex' is either 'male' or 'female'
-      const validSex: "male" | "female" =
-        parsedUser.sex === "male" || parsedUser.sex === "female"
-          ? parsedUser.sex
-          : "male"; // Default to 'male' if invalid
-
-      // Construct the user object conforming to UserModel
-      const user: UserModel = {
-        ...parsedUser,
-        sex: validSex, // Ensure the 'sex' field is valid
-      };
-
-      return user;
+      const parsedUser: UserModel = JSON.parse(userStr);
+      return parsedUser;
     } catch (error) {
       console.error("Error parsing user data from localStorage:", error);
       localStorage.removeItem("user"); // Clear corrupted data
@@ -54,7 +30,7 @@ export const readUser = (): UserModel | null => {
     }
   }
 
-  return testUser; // Fallback to test user if no user data is stored
+  return null; // Return null if no user is stored
 };
 
 // Delete access token from local storage
