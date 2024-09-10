@@ -27,9 +27,9 @@ export const doLogin = createAsyncThunk(
   "auth/doLogin",
   async (loginPayload: LoginRequest, { rejectWithValue }) => {
     try {
-      const res = await login(loginPayload);
+      const res = await login(loginPayload); // Ensure 'res.user' matches UserModel
       persistToken(res.token);
-      persistUser(res.user); // Save user data to localStorage
+      persistUser(res.user); // Make sure this is being called
       return { token: res.token, user: res.user }; // Return both token and user
     } catch (error: any) {
       return rejectWithValue(error.response?.data?.message || "Login failed");
