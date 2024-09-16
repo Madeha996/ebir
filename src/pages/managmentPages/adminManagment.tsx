@@ -1,6 +1,5 @@
 import { PageTitle } from "@app/components/common/PageTitle/PageTitle";
 import * as S from "@app/components/tables/Tables/Tables.styles";
-import { NewsBasicTable } from "@app/components/tables/NewsTable/NewsTable";
 import { useTranslation } from "react-i18next";
 import { AdminBasicTable } from "@app/components/tables/AdminTable/AdminTable";
 

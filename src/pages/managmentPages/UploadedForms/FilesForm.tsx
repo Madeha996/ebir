@@ -75,10 +75,10 @@ const FilesForm = ({
         onFinish={handeSubmissionFiles}
       >
         <Row align="middle" justify="space-between">
-          <Typography.Title>Files</Typography.Title>
+          <Typography.Title>{t("common.files")}</Typography.Title>
           <UploadComponent
             // allowedTypes={["jpg", "png", "gif"]}
-            label="Click to upload Files"
+            label={t("uploads.clickToUpload")}
             onChange={handleUploadFiles}
             fileList={newFilesList}
           />
@@ -119,7 +119,9 @@ const FilesForm = ({
           </Card>
         ) : (
           <Row justify="center">
-            <Typography.Paragraph>No Uploaded Files Yet</Typography.Paragraph>
+            <Typography.Paragraph>
+              {t("uploads.noUploadedFilesMessage")}
+            </Typography.Paragraph>
           </Row>
         )}
       </BaseButtonsForm>

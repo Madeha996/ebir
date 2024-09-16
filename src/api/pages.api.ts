@@ -19,8 +19,6 @@ export interface PagesTableData {
   pagination: Pagination;
 }
 
-const baseURL = `/pages`;
-
 const GetAllPages = async (
   current: number,
   pageSize: number,

@@ -1,13 +1,13 @@
-import React, { useCallback, useState } from 'react';
-import { Checkbox } from 'antd';
-import { useTranslation } from 'react-i18next';
-import { CheckboxValueType } from 'antd/lib/checkbox/Group';
-import { BaseButtonsForm } from '@app/components/common/forms/BaseButtonsForm/BaseButtonsForm';
-import { CheckboxColumn } from '@app/components/profile/profileCard/profileFormNav/nav/notifications/CheckboxColumn/CheckboxColumn';
-import { Option } from '@app/components/profile/profileCard/profileFormNav/nav/notifications/interfaces';
-import * as S from './NotificationsTypes.styles';
-import { BaseButtonsGroup } from '@app/components/common/forms/components/BaseButtonsGroup/BaseButtonsGroup';
-import { notificationController } from '@app/controllers/notificationController';
+import React, { useCallback, useState } from "react";
+import { Checkbox } from "antd";
+import { useTranslation } from "react-i18next";
+import { CheckboxValueType } from "antd/lib/checkbox/Group";
+import { BaseButtonsForm } from "@app/components/common/forms/BaseButtonsForm/BaseButtonsForm";
+import { CheckboxColumn } from "@app/components/profile/profileCard/profileFormNav/nav/notifications/CheckboxColumn/CheckboxColumn";
+import { Option } from "@app/components/profile/profileCard/profileFormNav/nav/notifications/interfaces";
+import * as S from "./NotificationsTypes.styles";
+import { BaseButtonsGroup } from "@app/components/common/forms/components/BaseButtonsGroup/BaseButtonsGroup";
+import { notificationController } from "@app/controllers/notificationController";
 
 interface Notifications {
   1: string[];
@@ -29,42 +29,56 @@ export const NotificationsTypes: React.FC = () => {
   const options: Option[] = [
     {
       id: 1,
-      header: t('common.email'),
+      header: t("common.email"),
       headerRender: (text, props) => <Checkbox {...props}>{text}</Checkbox>,
       data: [
-        'emailMessages',
-        'emailMentions',
-        'emailReminders',
-        'emailAllNews',
-        'emailImportantNews',
-        'emailActionRequired',
+        "emailMessages",
+        "emailMentions",
+        "emailReminders",
+        "emailAllNews",
+        "emailImportantNews",
+        "emailActionRequired",
       ],
       dataRender: (text) => <Checkbox value={text} />,
     },
     {
       id: 2,
-      header: t('profile.nav.notifications.push'),
+      header: t("profile.nav.notifications.push"),
       headerRender: (text, props) => <Checkbox {...props}>{text}</Checkbox>,
-      data: ['pushMessages', 'pushMentions', 'pushReminders', 'pushAllNews', 'pushImportantNews', 'pushActionRequired'],
+      data: [
+        "pushMessages",
+        "pushMentions",
+        "pushReminders",
+        "pushAllNews",
+        "pushImportantNews",
+        "pushActionRequired",
+      ],
       dataRender: (text) => <Checkbox value={text} />,
     },
     {
       id: 3,
-      header: t('profile.nav.notifications.SMS'),
+      header: t("profile.nav.notifications.SMS"),
       headerRender: (text, props) => <Checkbox {...props}>{text}</Checkbox>,
-      data: ['smsMessages', 'smsMentions', 'smsReminders', 'smsAllNews', 'smsImportantNews', 'smsActionRequired'],
+      data: [
+        "smsMessages",
+        "smsMentions",
+        "smsReminders",
+        "smsAllNews",
+        "smsImportantNews",
+        "smsActionRequired",
+      ],
       dataRender: (text) => <Checkbox value={text} />,
     },
     {
       id: 4,
-      header: t('profile.nav.notifications.activities'),
+      header: t("profile.nav.notifications.activities"),
       data: [
-        t('profile.nav.notifications.directMessages'),
-        t('profile.nav.notifications.mentions'),
-        t('profile.nav.notifications.reminders'),
-        t('profile.nav.notifications.allNews'),
-        t('profile.nav.notifications.importantNews'),
-        t('profile.nav.notifications.actionRequired'),
+        t("profile.nav.notifications.directMessages"),
+        t("profile.nav.notifications.mentions"),
+        t("profile.nav.notifications.reminders"),
+        t("profile.nav.notifications.allNews"),
+        t("profile.nav.notifications.importantNews"),
+        t("profile.nav.notifications.actionRequired"),
       ],
     },
   ];
@@ -73,7 +87,7 @@ export const NotificationsTypes: React.FC = () => {
     (mode: number) => (list: CheckboxValueType[]) => {
       setCheckedElements({ ...checkedElements, [mode]: list });
     },
-    [checkedElements],
+    [checkedElements]
   );
 
   const onCancel = useCallback(() => {
@@ -85,8 +99,7 @@ export const NotificationsTypes: React.FC = () => {
     setTimeout(() => {
       setLoading(false);
       setTriggered(false);
-      notificationController.success({ message: t('common.success') });
-      console.log(checkedElements);
+      notificationController.success({ message: t("common.success") });
     }, 1000);
   }, [setTriggered, checkedElements, t]);
 
@@ -100,7 +113,12 @@ export const NotificationsTypes: React.FC = () => {
     >
       <S.Wrapper>
         {options.map((item) => (
-          <CheckboxColumn key={item.id} column={item} handleCheck={handleCheck(item.id)} setTriggered={setTriggered} />
+          <CheckboxColumn
+            key={item.id}
+            column={item}
+            handleCheck={handleCheck(item.id)}
+            setTriggered={setTriggered}
+          />
         ))}
       </S.Wrapper>
     </BaseButtonsForm>

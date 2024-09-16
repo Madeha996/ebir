@@ -4,9 +4,7 @@ import { Pagination } from "@app/api/pages.api";
 import { Table } from "components/common/Table/Table";
 import { Button } from "components/common/buttons/Button/Button";
 import { useTranslation } from "react-i18next";
-import { AddFormModal } from "@app/components/Modals/AddFormModal";
 import * as S from "@app/components/forms/ControlForm/ControlForm.styles";
-import { EditFormModal } from "@app/components/Modals/EditFormModal";
 import { Modal } from "@app/components/common/Modal/Modal";
 import { useMutation, useQuery } from "react-query";
 import { notificationController } from "@app/controllers/notificationController";
@@ -17,12 +15,11 @@ import dayjs from "dayjs";
 import { CURRENT_PAGINATION, PAGE_SIZE_PAGINATION } from "@app/constants/Pages";
 import { useNavigate } from "react-router-dom";
 import { CreateNew, DeleteNew, GetAllNews, UpdateNew } from "@app/api/news.api";
-import { AddNewsModal } from "@app/components/Modals/AddNewsModal";
 import { EditNewsModal } from "@app/components/Modals/EditNewsModal";
+import AddNewsModal from "@app/components/Modals/AddNewsModal";
 
 export const NewsBasicTable: React.FC = () => {
   const { t } = useTranslation();
-  const navigate = useNavigate();
   const [editmodaldata, setEditmodaldata] = useState<NewsModal | undefined>(
     undefined
   );
@@ -39,13 +36,7 @@ export const NewsBasicTable: React.FC = () => {
   const [isAddVisible, setIsAddVisible] = useState<boolean>(false);
   const [isEditVisible, setIsEditVisible] = useState<boolean>(false);
   const [isDeleteVisible, setIsDeleteVisible] = useState<boolean>(false);
-  const [isEdit, setIsEdit] = useState<boolean>(false);
-  const [isDelete, setIsDelete] = useState<boolean>(false);
   const [keyWord, setKeyWord] = useState<string>("");
-  const [loading, setLoading] = useState(true);
-  const [refetchOnAddNew, setRefetchOnAddNew] = useState(false);
-  const [refetchOnEditNew, setRefetchOnEditNew] = useState(false);
-  const [refetchOnDeleteNew, setRefetchOnDeleteNew] = useState(false);
   const [total, setTotal] = useState();
 
   const showAddModal = () => {
@@ -61,7 +52,7 @@ export const NewsBasicTable: React.FC = () => {
     setIsEditVisible(false);
   };
 
-  const { data, isLoading, refetch, isRefetching, isFetched, error } = useQuery(
+  const { isLoading, refetch, isRefetching, isFetched } = useQuery(
     ["news", pagination.current, pagination.pageSize, keyWord],
     async () => {
       const response = await GetAllNews(
@@ -117,7 +108,7 @@ export const NewsBasicTable: React.FC = () => {
         message.open({
           content: (
             <Alert
-              message={t(`common.editPagesSuccessMessage`)}
+              message={t(`common.editNewSuccessMessage`)}
               type={`success`}
               showIcon
             />

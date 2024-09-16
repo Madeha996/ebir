@@ -19,10 +19,10 @@ export const LanguagePicker: React.FC = () => {
             <ReactCountryFlag svg countryCode="GB" />
           </Space>
         </RadioBtn>
-        <RadioBtn value="de">
+        <RadioBtn value="ar">
           <Space align="center">
-            Deutsch
-            <ReactCountryFlag svg countryCode="DE" />
+            Arabic
+            <ReactCountryFlag svg countryCode="SY" />
           </Space>
         </RadioBtn>
       </Space>

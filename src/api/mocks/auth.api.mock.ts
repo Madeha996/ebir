@@ -1,5 +1,5 @@
 import axios from "axios";
-import { AuthData, LoginResponse } from "@app/api/auth.api"; // Assuming you have AuthData and LoginResponse types
+import { AuthData, LoginResponse } from "@app/api/auth.api";
 
 const login = async (data: AuthData): Promise<LoginResponse> => {
   try {

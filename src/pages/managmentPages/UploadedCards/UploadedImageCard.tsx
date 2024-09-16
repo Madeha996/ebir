@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { BaseButtonsForm } from "@app/components/common/forms/BaseButtonsForm/BaseButtonsForm";
 import { Card, Button, Image, Input, message, Row, Col } from "antd";
 import { Modal } from "@app/components/common/Modal/Modal";
-import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import { DeleteOutlined } from "@ant-design/icons";
 import { useMutation } from "react-query";
 import { DeleteAttachment, EditAttachment } from "@app/api/files";
 import { useTranslation } from "react-i18next";
@@ -31,7 +31,6 @@ const UploadedImageCard = ({
   filePath,
   description,
   id,
-  onFinish,
   onDelete,
   uid,
   index,
@@ -40,6 +39,7 @@ const UploadedImageCard = ({
 }: UploadedImageCardProps) => {
   const { t } = useTranslation();
   const url = `https://eabir-backend.onrender.com${filePath}`;
+
   const [form] = BaseButtonsForm.useForm();
   const [isDisable, setIsDisable] = useState<boolean>(!!id);
   const [isFieldsChanged, setIsFieldsChanged] = useState<boolean>(false);
@@ -47,8 +47,19 @@ const UploadedImageCard = ({
   const [isDeleteVisible, setIsDeleteVisible] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const deleteAttachmentMutation = useMutation((id: string) =>
-    DeleteAttachment(id)
+  const deleteAttachmentMutation = useMutation(
+    (id: string) => DeleteAttachment(id),
+    {
+      onSuccess: () => {
+        onDelete?.(id!);
+        message.success("Attachment deleted successfully");
+        setDeleting((prev: boolean) => !prev);
+        // Trigger the parent's refetch function after successful deletion
+      },
+      onError: (error: any) => {
+        message.error(`Error deleting attachment: ${error}`);
+      },
+    }
   );
 
   const editAttachmentMutation = useMutation(
@@ -59,17 +70,16 @@ const UploadedImageCard = ({
     }: {
       id: string;
       title: string;
-      description?: string;
+      description: string;
     }) => EditAttachment(id, title, description),
     {
       onSuccess: () => {
-        setDeleting(true);
         setIsFieldsChanged(false);
         setIsDisable(true);
         message.success("Attachment edited successfully");
+        setDeleting((prev: boolean) => !prev);
       },
       onError: (error) => {
-        console.error("Error editing attachment:", error);
         message.error("Error editing attachment");
       },
     }
@@ -79,21 +89,6 @@ const UploadedImageCard = ({
     const { title, description } = form.getFieldsValue();
     if (fileId) {
       editAttachmentMutation.mutateAsync({ id: fileId, title, description });
-    }
-  };
-
-  const handleDelete = (id: any, uid: any) => {
-    if (id) {
-      deleteAttachmentMutation
-        .mutateAsync(id)
-        .then(() => {
-          message.success("Attachment deleted successfully");
-        })
-        .catch((error) => {
-          message.error(`Error deleting attachment: ${error}`);
-        });
-    } else {
-      onDelete?.(uid!);
     }
   };
 
@@ -110,7 +105,7 @@ const UploadedImageCard = ({
         getChildData?.(index!, values);
       })
       .catch((error) => {
-        console.error("Validation failed:", error);
+        message.error("Validation failed:", error);
       });
   };
 
@@ -123,11 +118,11 @@ const UploadedImageCard = ({
         onFieldsChange={handleFieldChange}
         footer={
           fileId ? (
-            <Row justify="center" style={{ width: "90%", margin: "auto" }}>
+            <Row justify="center" style={{ width: "90%", margin: "4px auto" }}>
               <Col span={12}>
                 <Button
                   type="default"
-                  style={{ width: "98%", margin: "0.5rem" }}
+                  style={{ width: "98%" }}
                   onClick={() => setIsDisable(true)}
                 >
                   {t("common.cancel")}
@@ -136,7 +131,7 @@ const UploadedImageCard = ({
               <Col span={12}>
                 <Button
                   type="primary"
-                  style={{ width: "98%", margin: "0.5rem" }}
+                  style={{ width: "98%" }}
                   onClick={handleEditSubmission}
                 >
                   {t("common.save")}

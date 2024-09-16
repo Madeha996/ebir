@@ -1,24 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { message, Alert, Divider, Col, Spin } from "antd";
+import { message, Divider, Col } from "antd";
 import { useTranslation } from "react-i18next";
 import { useMutation, useQuery } from "react-query";
 import { useParams } from "react-router-dom";
-import {
-  GetAttachmentByPageId,
-  UploadAttachment,
-  DeleteAttachment,
-} from "@app/api/files";
-import { BaseForm } from "@app/components/common/forms/BaseForm/BaseForm";
+import { GetAttachmentByPageId, UploadAttachment } from "@app/api/files";
 import { ImagesForm } from "./UploadedForms/ImagesForm";
 import VideoForm from "./UploadedForms/VideoForm";
 import FilesForm from "./UploadedForms/FilesForm";
 import { PageTitle } from "@app/components/common/PageTitle/PageTitle";
-import { Spinner } from "@app/components/common/Spinner/Spinner.styles";
 
 const PageSettingPage: React.FC = () => {
   const { t } = useTranslation();
   const { pageId } = useParams();
-  const [form] = BaseForm.useForm();
 
   const [imagesList, setImagesList] = useState<any[]>([]);
   const [videosList, setVideosList] = useState<any[]>([]);
@@ -29,13 +22,14 @@ const PageSettingPage: React.FC = () => {
   const [newFilesList, setNewFilesList] = useState<any[]>([]);
 
   const [isLoading, setLoading] = useState(false);
-  const [isEditing, setEditing] = useState(false);
   const [isDeleting, setDeleting] = useState(false);
 
   const { data: attachmentByPageId, refetch } = useQuery(
-    ["attachments", pageId, isDeleting, isEditing],
+    ["attachments", pageId],
     () => GetAttachmentByPageId(pageId ?? ""),
+
     {
+      refetchOnWindowFocus: false,
       onSuccess: (data) => {
         const response = data?.data?.data || [];
 
@@ -58,12 +52,10 @@ const PageSettingPage: React.FC = () => {
       onSettled: () => setLoading(false),
     }
   );
-
   const uploadAttachment = useMutation(
     (data: FormData) => UploadAttachment(data),
     {
       onSuccess: () => {
-        // message.success(t("Pagess.editPagesSuccessMessage"));
         refetch();
       },
       onError: (error: any) => {
@@ -130,29 +122,24 @@ const PageSettingPage: React.FC = () => {
       }
     };
 
-  const handleDelete = (
-    type: "image" | "video" | "application",
-    uid: string
-  ) => {
-    setDeleting(true);
-    setTimeout(() => {
-      const setList =
-        type === "image"
-          ? setNewImagesList
-          : type === "video"
-          ? setNewVideosList
-          : setNewFilesList;
-      setList((prevList) => prevList.filter((item) => item.uid !== uid));
-    }, 1000);
+  const handleDelete = (type: string, uid: string) => {
+    const setList =
+      type === "image"
+        ? setNewImagesList
+        : type === "video"
+        ? setNewVideosList
+        : setNewFilesList;
+
+    setList((prevList) => prevList.filter((item) => item.uid !== uid));
   };
 
   useEffect(() => {
     refetch();
-  }, [isDeleting, imagesList, videosList, filesList]);
+  }, [isDeleting]);
 
   return (
     <>
-      <PageTitle>{t("common.pageManagment")}</PageTitle>
+      <PageTitle>{t("common.pages-managment")}</PageTitle>
       <Col span={23} style={{ margin: "1rem auto" }}>
         <ImagesForm
           handeSubmissionImages={handleSubmission(
@@ -167,7 +154,7 @@ const PageSettingPage: React.FC = () => {
           onFinish={handleSubmission(
             newImagesList,
             setNewImagesList,
-            setLoading // Pass setLoading here
+            setLoading
           )}
           loading={isLoading}
           setNewImagesList={setNewImagesList}

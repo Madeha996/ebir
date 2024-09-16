@@ -1,10 +1,8 @@
 import React from "react";
-import { Modal } from "antd";
-import { useTranslation } from "react-i18next";
-import { BaseForm } from "@app/components/common/forms/BaseForm/BaseForm";
 import { Input } from "@app/components/common/inputs/Input/Input";
-import { useResetFormOnCloseModal } from "../forms/ControlForm/useResetFormOnCloseModal";
+import EditModal from "./Generic/GenericEditModal";
 import { AdminModal } from "@app/domain/AppModal";
+import { useTranslation } from "react-i18next";
 
 interface EditAdminModalProps {
   visible: boolean;
@@ -19,58 +17,40 @@ export const EditAdminModal: React.FC<EditAdminModalProps> = ({
   onCancel,
   onEdit,
   editedValues,
+  title,
 }) => {
-  const [form] = BaseForm.useForm();
   const { t } = useTranslation();
 
-  useResetFormOnCloseModal({
-    form,
-    visible,
-  });
+  const fields = [
+    {
+      name: "name",
+      label: t("common.name"),
+      component: Input,
+      rules: [{ required: true, message: t("common.requiredField") }], // Use `t` for message
+    },
+    {
+      name: "email",
+      label: t("common.email"),
+      component: Input,
+      rules: [{ required: true, message: t("common.requiredField") }],
+    },
+    {
+      name: "password",
+      label: t("common.password"),
+      component: Input,
+      rules: [{ required: true, message: t("common.requiredField") }],
+      value: undefined, // Ensure password is undefined
+    },
+  ];
 
-  const onOk = () => {
-    form.submit();
-  };
-
-  const onFinish = (PagesData: AdminModal) => {
-    onEdit(PagesData);
-  };
   return (
-    <Modal
-      title={t("common.editAdmin")}
+    <EditModal
       visible={visible}
-      onOk={onOk}
       onCancel={onCancel}
-    >
-      <BaseForm
-        form={form}
-        onFinish={onFinish}
-        layout="vertical"
-        name="userForm"
-        initialValues={editedValues}
-      >
-        <BaseForm.Item
-          name="name"
-          label={t("common.name")}
-          rules={[{ required: true, message: t("common.requiredField") }]}
-        >
-          <Input value={editedValues?.name} />
-        </BaseForm.Item>
-        <BaseForm.Item
-          name="email"
-          label={t("common.email")}
-          rules={[{ required: true, message: t("common.requiredField") }]}
-        >
-          <Input value={editedValues?.email} />
-        </BaseForm.Item>
-        <BaseForm.Item
-          name="password"
-          label={t("common.password")}
-          rules={[{ required: true, message: t("common.requiredField") }]}
-        >
-          <Input />
-        </BaseForm.Item>
-      </BaseForm>
-    </Modal>
+      onEdit={onEdit}
+      editedValues={editedValues}
+      title={title || t("common.editAdmin")} // Translate title
+      fields={fields}
+    />
   );
 };

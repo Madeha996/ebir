@@ -1,7 +1,5 @@
 import { httpApi } from "./http.api";
 
-const baseURL = `/socialMedia`;
-
 export interface SocialMedia {
   _id: string;
   link: string;

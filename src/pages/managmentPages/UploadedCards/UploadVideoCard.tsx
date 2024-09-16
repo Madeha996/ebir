@@ -1,18 +1,13 @@
 import { BaseForm } from "@app/components/common/forms/BaseForm/BaseForm";
 import React, { useState } from "react";
 import { Card } from "@app/components/common/Card/Card";
-import { Button, Col, Image, Input, message, Row } from "antd";
-import { CheckOutlined, DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import { Button, Col, Input, message, Row } from "antd";
+import { CheckOutlined, DeleteOutlined } from "@ant-design/icons";
 import { BaseButtonsForm } from "@app/components/common/forms/BaseButtonsForm/BaseButtonsForm";
 import { useTranslation } from "react-i18next";
 import { TextArea } from "@app/components/common/inputs/Input/Input";
 import { useMutation } from "react-query";
-import {
-  DeleteAttachment,
-  EditAttachment,
-  UploadAttachment,
-} from "@app/api/files";
-// import ReactPlayer from "react-player";
+import { DeleteAttachment, EditAttachment } from "@app/api/files";
 import { default as _ReactPlayer } from "react-player/lazy";
 import { ReactPlayerProps } from "react-player/types/lib";
 import { Spinner } from "@app/components/common/Spinner/Spinner.styles";
@@ -66,21 +61,6 @@ const UploadVideoCard = ({
     DeleteAttachment(id)
   );
 
-  const handleDelete = (id: any, uid: any) => {
-    if (id) {
-      deleteAttachmentMutation
-        .mutateAsync(id)
-        .then(() => {
-          message.success("Attachment deleted successfully");
-        })
-        .catch((error) => {
-          message.error("Error deleting attachment:", error);
-        });
-    } else {
-      onDelete?.(uid);
-    }
-  };
-
   const editAttachmentMutation = useMutation(
     ({
       id,
@@ -89,7 +69,7 @@ const UploadVideoCard = ({
     }: {
       id: string;
       title: string;
-      description?: string;
+      description: string;
     }) => EditAttachment(id, title, description),
     {
       onSuccess: () => {
@@ -98,7 +78,6 @@ const UploadVideoCard = ({
         message.success("Attachment edited successfully");
       },
       onError: (error) => {
-        console.error("Error editing attachment:", error);
         message.error("Error editing attachment");
       },
     }
@@ -124,7 +103,7 @@ const UploadVideoCard = ({
         getChildData?.(index!, values);
       })
       .catch((error) => {
-        console.error("Validation failed:", error);
+        message.error("Validation failed:", error);
       });
   };
 
@@ -138,11 +117,11 @@ const UploadVideoCard = ({
         onFieldsChange={handleFieldChange}
         footer={
           fileId ? (
-            <Row justify="center" style={{ width: "90%", margin: "auto" }}>
+            <Row justify="center" style={{ width: "90%", margin: "4px auto" }}>
               <Col span={12}>
                 <Button
                   type="default"
-                  style={{ width: "98%", margin: "0.5rem" }}
+                  style={{ width: "98%" }}
                   onClick={() => setIsDisable(true)}
                 >
                   {t("common.cancel")}
@@ -151,7 +130,7 @@ const UploadVideoCard = ({
               <Col span={12}>
                 <Button
                   type="primary"
-                  style={{ width: "98%", margin: "0.5rem" }}
+                  style={{ width: "98%" }}
                   onClick={handleEditSubmission}
                 >
                   {t("common.save")}

@@ -2,20 +2,14 @@ import { BaseForm } from "@app/components/common/forms/BaseForm/BaseForm";
 import React, { useState } from "react";
 import { Card } from "@app/components/common/Card/Card";
 import { Button, Col, Image, Input, message, Row } from "antd";
-import { CheckOutlined, DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import { CheckOutlined, DeleteOutlined } from "@ant-design/icons";
 import { BaseButtonsForm } from "@app/components/common/forms/BaseButtonsForm/BaseButtonsForm";
 import { useTranslation } from "react-i18next";
 import { TextArea } from "@app/components/common/inputs/Input/Input";
 import { useMutation } from "react-query";
-import {
-  DeleteAttachment,
-  EditAttachment,
-  UploadAttachment,
-} from "@app/api/files";
-import { useParams } from "react-router-dom";
+import { DeleteAttachment, EditAttachment } from "@app/api/files";
 import PdfImg from "@app/assets/images/pdf.png";
 import { Link } from "react-router-dom";
-import { Spinner } from "@app/components/common/Spinner/Spinner.styles";
 import { Modal } from "@app/components/common/Modal/Modal";
 
 interface UploadFileCardProps {
@@ -24,7 +18,6 @@ interface UploadFileCardProps {
   description?: string;
   id?: string;
   onFinish?: any;
-  // cardLabel?: string;
   onDelete?: (attachmentId: string) => void; // Add a callback function
   uid?: string;
   type?: string;
@@ -39,11 +32,8 @@ const UploadFilesCard = ({
   filePath,
   description,
   id,
-  // cardLabel,
-  onFinish,
   onDelete,
   uid,
-  type,
   getChildData,
   index,
 }: UploadFileCardProps) => {
@@ -61,8 +51,6 @@ const UploadFilesCard = ({
     DeleteAttachment(id)
   );
 
-  console.log("fileId", fileId);
-
   const editAttachmentMutation = useMutation(
     ({
       id,
@@ -71,7 +59,7 @@ const UploadFilesCard = ({
     }: {
       id: string;
       title: string;
-      description?: string;
+      description: string;
     }) => EditAttachment(id, title, description),
     {
       onSuccess: () => {
@@ -80,7 +68,6 @@ const UploadFilesCard = ({
         message.success("Attachment edited successfully");
       },
       onError: (error) => {
-        console.error("Error editing attachment:", error);
         message.error("Error editing attachment");
       },
     }
@@ -99,21 +86,6 @@ const UploadFilesCard = ({
     }
   };
 
-  const handleDelete = (id: any, uid: any) => {
-    if (id) {
-      deleteAttachmentMutation
-        .mutateAsync(id)
-        .then(() => {
-          message.success("Attachment deleted successfully");
-        })
-        .catch((error) => {
-          message.error("Error deleting attachment:", error);
-        });
-    } else {
-      onDelete?.(uid);
-    }
-  };
-
   const handleFieldChange = () => {
     form
       .validateFields()
@@ -121,12 +93,11 @@ const UploadFilesCard = ({
         getChildData?.(index!, values);
       })
       .catch((error) => {
-        console.error("Validation failed:", error);
+        message.error("Validation failed:", error);
       });
   };
 
   return (
-    // <Spinner spinning={isLoading}>
     <BaseButtonsForm
       isFieldsChanged={isFieldsChanged}
       form={form}
@@ -135,21 +106,25 @@ const UploadFilesCard = ({
       style={{ width: "98%" }}
       footer={
         fileId ? (
-          <Row justify="space-evenly" style={{ width: "90%", margin: "auto" }}>
-            <Button
-              type="primary"
-              style={{ width: "50%", margin: "0.5rem" }}
-              onClick={handleEditSubmission}
-            >
-              {t("common.save")}
-            </Button>
-            <Button
-              type="default"
-              style={{ width: "50%", margin: "0.5rem" }}
-              onClick={() => setIsDisable(true)}
-            >
-              {t("common.cancel")}
-            </Button>
+          <Row justify="center" style={{ width: "90%", margin: "4px auto" }}>
+            <Col span={12}>
+              <Button
+                type="default"
+                style={{ width: "98%" }}
+                onClick={() => setIsDisable(true)}
+              >
+                {t("common.cancel")}
+              </Button>
+            </Col>
+            <Col span={12}>
+              <Button
+                type="primary"
+                style={{ width: "98%" }}
+                onClick={handleEditSubmission}
+              >
+                {t("common.save")}
+              </Button>
+            </Col>
           </Row>
         ) : (
           <></>
@@ -241,7 +216,6 @@ const UploadFilesCard = ({
         </Modal>
       </div>
     </BaseButtonsForm>
-    // </Spinner>
   );
 };
 

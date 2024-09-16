@@ -1,28 +1,28 @@
 import React from "react";
 import { Input } from "@app/components/common/inputs/Input/Input";
 import EditModal from "./Generic/GenericEditModal";
-import { NewsModal } from "@app/domain/AppModal";
+import { PagesModal } from "@app/domain/AppModal";
 import { useTranslation } from "react-i18next";
 
-interface EditNewsModalProps {
+interface EditPageModalProps {
   visible: boolean;
   onCancel: () => void;
-  onEdit: (data: NewsModal) => void;
-  editedValues: NewsModal | undefined;
+  onEdit: (data: PagesModal) => void;
+  editedValues: PagesModal | undefined;
   title?: string;
 }
 const { t } = useTranslation();
 
 const fields = [
   {
-    name: t("title"),
+    name: "name",
     label: t("common.name"),
     component: Input,
     rules: [{ required: true, message: t("common.requiredField") }],
   },
 ];
 
-export const EditNewsModal: React.FC<EditNewsModalProps> = ({
+export const EditPageModal: React.FC<EditPageModalProps> = ({
   visible,
   onCancel,
   onEdit,

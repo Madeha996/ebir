@@ -8,12 +8,9 @@ interface DesktopHeaderProps {
   isTwoColumnsLayout: boolean;
 }
 
-export const DesktopHeader: React.FC<DesktopHeaderProps> = ({
-  isTwoColumnsLayout,
-}) => {
+export const DesktopHeader: React.FC<DesktopHeaderProps> = () => {
   return (
     <Row justify="space-between" align="middle">
-      {/* <S.ProfileColumn xl={8} xxl={7} $isTwoColumnsLayout={isTwoColumnsLayout}> */}
       <Row
         align="middle"
         justify="end"
