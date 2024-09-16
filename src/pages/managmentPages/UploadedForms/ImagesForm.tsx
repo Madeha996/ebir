@@ -31,7 +31,6 @@ export const ImagesForm = ({
   handleUploadImages,
   handleDeleteImageCard,
   handeSubmissionImages,
-  onFinish,
   setNewImagesList,
   loading,
   setDeleting,
@@ -76,9 +75,9 @@ export const ImagesForm = ({
           onFinish={handeSubmissionImages}
         >
           <Row align="middle" justify="space-between">
-            <Typography.Title>Images</Typography.Title>
+            <Typography.Title>{t("common.images")}</Typography.Title>
             <UploadComponent
-              label="Click to upload Image"
+              label={t("uploads.clickToUpload")}
               onChange={handleUploadImages}
               fileList={newImagesList}
             />

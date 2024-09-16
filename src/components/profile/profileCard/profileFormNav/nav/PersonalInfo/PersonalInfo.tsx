@@ -76,13 +76,11 @@ export const PersonalInfo: React.FC = () => {
 
   const onFinish = useCallback(
     (values: any) => {
-      // todo dispatch an action here
       setLoading(true);
       setTimeout(() => {
         setLoading(false);
         setFieldsChanged(false);
         notificationController.success({ message: t("common.success") });
-        console.log(values);
       }, 1000);
     },
     [t]

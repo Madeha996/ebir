@@ -1,4 +1,4 @@
-import { LanguageType } from '@app/interfaces/interfaces';
+import { LanguageType } from "@app/interfaces/interfaces";
 
 interface Language {
   id: number;
@@ -10,14 +10,14 @@ interface Language {
 export const languages: Language[] = [
   {
     id: 1,
-    name: 'en',
-    title: 'English',
-    countryCode: 'gb',
+    name: "en",
+    title: "English",
+    countryCode: "gb",
   },
   {
     id: 2,
-    name: 'de',
-    title: 'German',
-    countryCode: 'de',
+    name: "ar",
+    title: "Syria",
+    countryCode: "sy",
   },
 ];

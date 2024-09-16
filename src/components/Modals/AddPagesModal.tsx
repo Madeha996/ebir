@@ -1,26 +1,26 @@
 import React from "react";
-import { NewsModal } from "@app/domain/AppModal";
+import { PagesModal } from "@app/domain/AppModal";
 import GenericAddModal from "./Generic/GenericAddModal";
 import { Input } from "@app/components/common/inputs/Input/Input";
 import { useTranslation } from "react-i18next";
 
-const AddNewsModal: React.FC<{
+const AddPagesModal: React.FC<{
   visible: boolean;
   onCancel: () => void;
-  onCreate: (data: NewsModal) => void;
+  onCreate: (data: PagesModal) => void;
 }> = ({ visible, onCancel, onCreate }) => {
   const { t } = useTranslation();
 
   return (
-    <GenericAddModal<NewsModal>
+    <GenericAddModal<PagesModal>
       visible={visible}
       onCancel={onCancel}
       onCreate={onCreate}
-      title="Add New News"
+      title="Add New"
       fields={[
         {
-          name: "title",
-          label: t("common.title"),
+          name: "name",
+          label: t("common.name"),
           component: <Input />,
           rules: [{ required: true, message: t("common.requiredField") }],
         },
@@ -29,4 +29,4 @@ const AddNewsModal: React.FC<{
   );
 };
 
-export default AddNewsModal;
+export default AddPagesModal;

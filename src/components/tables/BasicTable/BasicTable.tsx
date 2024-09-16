@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { message, Space } from "antd";
 import { Pagination } from "@app/api/pages.api";
 import { Table } from "components/common/Table/Table";
 import { Button } from "components/common/buttons/Button/Button";
 import { useTranslation } from "react-i18next";
-import { AddFormModal } from "@app/components/Modals/AddFormModal";
 import * as S from "@app/components/forms/ControlForm/ControlForm.styles";
-import { EditFormModal } from "@app/components/Modals/EditFormModal";
+import { EditPageModal } from "@app/components/Modals/EditPageModal";
 import { Modal } from "@app/components/common/Modal/Modal";
 import { useMutation, useQuery } from "react-query";
 import { notificationController } from "@app/controllers/notificationController";
@@ -22,7 +21,7 @@ import {
 import dayjs from "dayjs";
 import { CURRENT_PAGINATION, PAGE_SIZE_PAGINATION } from "@app/constants/Pages";
 import { useNavigate } from "react-router-dom";
-import { Spinner } from "@app/components/common/Spinner/Spinner.styles";
+import AddPagesModal from "@app/components/Modals/AddPagesModal";
 
 export const BasicTable: React.FC = () => {
   const { t } = useTranslation();
@@ -65,7 +64,7 @@ export const BasicTable: React.FC = () => {
     setIsEditVisible(false);
   };
 
-  const { data, isLoading, refetch, isRefetching, isFetched, error } = useQuery(
+  const { data } = useQuery(
     [
       "pages",
       pagination.current,
@@ -77,7 +76,7 @@ export const BasicTable: React.FC = () => {
       refetchOnDeletePage,
     ],
     async () => {
-      setLoading(true); // Set loading to true before the API request
+      setLoading(true);
       return await GetAllPages(
         pagination.current ?? 1,
         pagination.pageSize ?? 10,
@@ -86,15 +85,15 @@ export const BasicTable: React.FC = () => {
         .then((data) => {
           setTotal(data?.data?.total);
           setTableData(data?.data);
-          setLoading(false); // Set loading to false after receiving data
-          return data; // Ensure the data is returned for useQuery to process
+          setLoading(false);
+          return data;
         })
         .catch((err) => {
-          setLoading(false); // Set loading to false on error
+          setLoading(false);
           notificationController.error({
             message: err?.message || err.error?.message,
           });
-          throw err; // Ensure the error is thrown to let useQuery handle it
+          throw err;
         });
     },
     {
@@ -107,12 +106,6 @@ export const BasicTable: React.FC = () => {
       },
     }
   );
-
-  // console.log("data", data);
-
-  // useEffect(() => {
-  //   refetch();
-  // }, [isFetched]);
 
   const AddPage = useMutation((data: PagesModal) =>
     CreatePage(data.name)
@@ -262,14 +255,14 @@ export const BasicTable: React.FC = () => {
       <S.AddUserButton type="default" htmlType="button" onClick={showAddModal}>
         {t("common.add")}
       </S.AddUserButton>
-      <AddFormModal
+      <AddPagesModal
         visible={isAddVisible}
         onCancel={hideAddModal}
         onCreate={(data: PagesModal) => {
           AddPage.mutateAsync(data);
         }}
       />
-      <EditFormModal
+      <EditPageModal
         visible={isEditVisible}
         onCancel={hideEditModal}
         onEdit={(data) =>
@@ -308,8 +301,6 @@ export const BasicTable: React.FC = () => {
           },
           total: total,
         }}
-        // loading={loading}
-        // onChange={handleTableChange}
         scroll={{ x: 800 }}
         bordered
         loading={loading}

@@ -4,7 +4,7 @@ import { BaseButtonsForm } from "@app/components/common/forms/BaseButtonsForm/Ba
 import { BaseForm } from "@app/components/common/forms/BaseForm/BaseForm";
 import { PageTitle } from "@app/components/common/PageTitle/PageTitle";
 import { notificationController } from "@app/controllers/notificationController";
-import { Button, Col, Input, Row, Typography } from "antd";
+import { Button, Col, Input, message, Row, Typography } from "antd";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "react-query";
@@ -44,20 +44,15 @@ const ContactUs = () => {
   useEffect(() => {
     if (data?.data?.data && !isFormInitialized) {
       const initialValues = data.data.data.reduce((acc: any, item: any) => {
-        console.log("Processing item", item);
-
-        // Check and map the `type` to form field names and `link` to values
         if (item.type && item.link) {
           acc[item.type] = item.link;
         } else {
-          console.error("Invalid item structure", item);
+          message.error("Invalid item structure", item);
         }
 
-        console.log("Current accumulator", acc);
         return acc;
       }, {});
 
-      console.log("Initial form values", initialValues);
       form.setFieldsValue(initialValues);
       setIsFormInitialized(true);
     }

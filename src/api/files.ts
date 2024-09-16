@@ -1,6 +1,6 @@
 import { httpApi } from "./http.api";
 
-const baseURL = `/files`;
+const baseURL = `files`;
 
 const GetAttachments = async (
   files: string,
@@ -8,12 +8,12 @@ const GetAttachments = async (
   keyword: string
 ) => {
   return await httpApi.get(
-    `files?files=${files}&limit=${limit}&keyword=${keyword}`
+    `${baseURL}?files=${files}&limit=${limit}&keyword=${keyword}`
   );
 };
 
 const UploadAttachment = async (file: FormData) => {
-  return await httpApi.post("files", file);
+  return await httpApi.post(`${baseURL}`, file);
 };
 
 const UpdateAttachment = async (id: string, name: string) => {
@@ -21,23 +21,23 @@ const UpdateAttachment = async (id: string, name: string) => {
 };
 
 const GetAttachmentById = async (id: string) => {
-  return await httpApi.get(`files/${id}`);
+  return await httpApi.get(`${baseURL}/${id}`);
 };
 
 const GetAttachmentByPageId = async (pageId: string) => {
-  return await httpApi.get(`files/page/${pageId}`);
+  return await httpApi.get(`${baseURL}/page/${pageId}`);
 };
 
 const DeleteAttachment = async (id: string) => {
-  return await httpApi.delete(`files/${id}`);
+  return await httpApi.delete(`${baseURL}/${id}`);
 };
 
 const EditAttachment = async (
   fileId: string,
   title: string,
-  description?: string
+  description: string
 ) => {
-  return await httpApi.put(`files/${fileId}`, { title });
+  return await httpApi.put(`${baseURL}/${fileId}`, { title, description });
 };
 
 export {

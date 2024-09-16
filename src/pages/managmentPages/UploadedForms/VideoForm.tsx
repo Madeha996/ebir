@@ -74,10 +74,10 @@ const VideoForm = ({
         onFinish={handeSubmissionVideos}
       >
         <Row align="middle" justify="space-between">
-          <Typography.Title>Videos</Typography.Title>
+          <Typography.Title>{t("common.videos")}</Typography.Title>
           <UploadComponent
             // allowedTypes={["jpg", "png", "gif"]}
-            label="Click to upload Video"
+            label={t("uploads.clickToUpload")}
             onChange={handleUploadVideos}
             fileList={newVideosList}
           />
@@ -115,7 +115,9 @@ const VideoForm = ({
           </Card>
         ) : (
           <Row justify="center">
-            <Typography.Paragraph>No Uploaded Videos Yet</Typography.Paragraph>
+            <Typography.Paragraph>
+              {t("uploads.noUploadedVideosMessage")}
+            </Typography.Paragraph>
           </Row>
         )}
       </BaseButtonsForm>

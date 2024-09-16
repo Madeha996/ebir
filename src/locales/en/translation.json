@@ -4,6 +4,7 @@
     "signUpSuccessMessage": "New user was created"
   },
   "common": {
+    "requiredField": "Required Field",
     "login": "Login",
     "title": "title",
     "address": "Address",
@@ -60,6 +61,9 @@
     "warning": "Warning",
     "zipcode": "Zipcode",
     "delete": "Delete",
+    "images": "Images",
+    "videos": "Videos",
+    "files": "Files",
 
     "pages-managment": "Pages Managment",
     "news-page": "News",
@@ -76,7 +80,10 @@
     "createdAt": "Created At",
     "addPagesSuccessMessage": "Page added Successfully",
     "addAdminSuccessMessage": "Admin added Successfully",
+    "addNewSuccessMessage": "New added Successfully",
     "editPagesSuccessMessage": "Page updated Successfully",
+    "editAdminSuccessMessage": "Admin updated Successfully",
+    "editNewSuccessMessage": "New updated Successfully",
     "editPage": "Edit Page",
     "deleteEnsureMessage": "Do you want to delete ?",
     "deletePagesSuccessMessage": "Page deleted Successfully",
@@ -113,11 +120,6 @@
     "darkTheme": "Dark",
     "lightTheme": "Light",
     "logout": "Logout",
-    "nightMode": {
-      "from": "From",
-      "title": "Nightmode",
-      "to": "To"
-    },
     "search": "Search"
   },
   "inputs": {
@@ -193,6 +195,9 @@
     "dragger": "Dragger upload",
     "dragUpload": "Click or drag file to this area to upload",
     "failedUpload": "{{name}} file upload failed.",
-    "successUpload": "{{name}} file uploaded successfully."
+    "successUpload": "{{name}} file uploaded successfully.",
+    "noUploadedFilesMessage": "No Uploaded Files Yet",
+    "noUploadedVideosMessage": "No Uploaded Videos Yet",
+    "noUploadedImagesMessage": "No Uploaded Images Yet"
   }
 }

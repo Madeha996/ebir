@@ -1,10 +1,8 @@
+import React from "react";
 import { UploadOutlined } from "@ant-design/icons";
 import { Button } from "@app/components/common/buttons/Button/Button.styles";
 import { BaseButtonsForm } from "@app/components/common/forms/BaseButtonsForm/BaseButtonsForm";
 import { Upload } from "@app/components/common/Upload/Upload.styles";
-import { message } from "antd";
-import React from "react";
-import { useTranslation } from "react-i18next";
 
 interface UploadComponentProps {
   accept?: string;
@@ -30,7 +28,6 @@ const UploadComponent = ({
   //   return isAllowedType;
   // };
 
-  const { t } = useTranslation();
   return (
     <BaseButtonsForm.Item name="uploadImage">
       <Upload
@@ -40,7 +37,6 @@ const UploadComponent = ({
         fileList={fileList}
         // beforeUpload={handleBeforeUpload}
         showUploadList={false}
-        // beforeUpload={handleUpload}
         onChange={onChange}
       >
         <Button icon={<UploadOutlined />}>{label}</Button>

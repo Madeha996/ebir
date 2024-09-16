@@ -24,7 +24,6 @@ export const readUser = (): UserModel | null => {
       const parsedUser: UserModel = JSON.parse(userStr);
       return parsedUser;
     } catch (error) {
-      console.error("Error parsing user data from localStorage:", error);
       localStorage.removeItem("user"); // Clear corrupted data
       return null;
     }

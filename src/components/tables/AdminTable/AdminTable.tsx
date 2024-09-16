@@ -4,7 +4,7 @@ import { Pagination } from "@app/api/pages.api";
 import { Table } from "components/common/Table/Table";
 import { Button } from "components/common/buttons/Button/Button";
 import { useTranslation } from "react-i18next";
-import { AddAdminModal } from "@app/components/Modals/AddAdminModal";
+
 import { EditAdminModal } from "@app/components/Modals/EditAdminModal";
 import { Modal } from "@app/components/common/Modal/Modal";
 import { useMutation, useQuery } from "react-query";
@@ -21,6 +21,7 @@ import {
   UpdateAdmin,
 } from "@app/api/admin.api";
 import * as S from "@app/components/forms/ControlForm/ControlForm.styles";
+import AddAdmainModal from "@app/components/Modals/AddAdminModal";
 
 export const AdminBasicTable: React.FC = () => {
   const { t } = useTranslation();
@@ -71,7 +72,7 @@ export const AdminBasicTable: React.FC = () => {
     CreateAdmin(data.name, data.email, data.password)
       .then(() => {
         notificationController.success({
-          message: t("common.addPagesSuccessMessage"),
+          message: t("common.addAdminSuccessMessage"),
         });
         setIsAddVisible(false);
         refetch(); // Trigger a refetch after adding a new admin
@@ -94,7 +95,7 @@ export const AdminBasicTable: React.FC = () => {
         message.open({
           content: (
             <Alert
-              message={t(`common.editPagesSuccessMessage`)}
+              message={t(`common.editAdminSuccessMessage`)}
               type={`success`}
               showIcon
             />
@@ -121,7 +122,7 @@ export const AdminBasicTable: React.FC = () => {
       .mutateAsync(id)
       .then(() => {
         notificationController.success({
-          message: t("common.deletePagesSuccessMessage"),
+          message: t("common.deleteAdminSuccessMessage"),
         });
         refetch(); // Trigger a refetch after deleting an admin
       })
@@ -200,7 +201,7 @@ export const AdminBasicTable: React.FC = () => {
       <S.AddUserButton type="default" htmlType="button" onClick={showAddModal}>
         {t("common.add")}
       </S.AddUserButton>
-      <AddAdminModal
+      <AddAdmainModal
         visible={isAddVisible}
         onCancel={hideAddModal}
         onCreate={(data: AdminModal) => {

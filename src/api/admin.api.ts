@@ -19,7 +19,7 @@ export interface PagesTableData {
   pagination: Pagination;
 }
 
-const baseURL = `/admins`;
+const baseURL = `admins`;
 
 const GetAllAdmins = async (
   current: number,
@@ -27,12 +27,12 @@ const GetAllAdmins = async (
   keyword?: string
 ) => {
   return await httpApi.get(
-    `admins?page=${current}&limit=${pageSize}&keyword=${keyword}`
+    `${baseURL}?page=${current}&limit=${pageSize}&keyword=${keyword}`
   );
 };
 
 const CreateAdmin = async (name: string, email: string, password: string) => {
-  return await httpApi.post("admins", {
+  return await httpApi.post(`${baseURL}`, {
     name,
     email,
     password,
@@ -40,7 +40,7 @@ const CreateAdmin = async (name: string, email: string, password: string) => {
 };
 
 const UpdateAdmin = async (data: AdminModal) => {
-  return await httpApi.put(`admins/${data?._id}`, {
+  return await httpApi.put(`${baseURL}/${data?._id}`, {
     name: data?.name,
     email: data?.email,
     password: data?.password,
@@ -48,6 +48,6 @@ const UpdateAdmin = async (data: AdminModal) => {
 };
 
 const DeleteAdmin = async (id: string) => {
-  return await httpApi.delete(`/admins/${id}`);
+  return await httpApi.delete(`/${baseURL}/${id}`);
 };
 export { GetAllAdmins, UpdateAdmin, CreateAdmin, DeleteAdmin };

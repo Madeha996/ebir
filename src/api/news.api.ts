@@ -1,4 +1,4 @@
-import { NewsModal, PagesModal } from "@app/domain/AppModal";
+import { NewsModal } from "@app/domain/AppModal";
 import { httpApi } from "./http.api";
 
 export interface PagesTableRow {
@@ -18,8 +18,6 @@ export interface PagesTableData {
   data: PagesTableRow[];
   pagination: Pagination;
 }
-
-const baseURL = `/news`;
 
 const GetAllNews = async (
   current: number,

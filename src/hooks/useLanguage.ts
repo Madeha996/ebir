@@ -1,28 +1,47 @@
-import { Dates } from '@app/constants/Dates';
-import { LanguageType } from '@app/interfaces/interfaces';
-import { useCallback, useEffect, useMemo } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Dates } from "@app/constants/Dates";
+import { LanguageType } from "@app/interfaces/interfaces";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 
-const localLanguage = (localStorage.getItem('lng') as LanguageType) || 'en';
-
-export const useLanguage = (): { language: LanguageType; setLanguage: (locale: LanguageType) => Promise<void> } => {
+export const useLanguage = (): {
+  language: LanguageType;
+  setLanguage: (locale: LanguageType) => Promise<void>;
+  direction: "ltr" | "rtl";
+} => {
   const { i18n } = useTranslation();
+  const [localLanguage, setLocalLanguage] = useState<LanguageType>(
+    (localStorage.getItem("simoLng") as LanguageType) || "en"
+  );
 
   const handleChangeLanguage = useCallback(
     async (locale: LanguageType) => {
       Dates.setLocale(locale);
-      localStorage.setItem('lng', locale);
+      localStorage.setItem("simoLng", locale);
       await i18n.changeLanguage(locale);
+      setLocalLanguage(locale);
     },
-    [i18n],
+    [i18n]
   );
 
   useEffect(() => {
+    i18n.language === "ar"
+      ? (document.body.style.fontFamily = "Cairo, sans-serif")
+      : (document.body.style.fontFamily = "Lato, sans-serif");
+
+    const direction = i18n.language === "ar" ? "rtl" : "ltr";
+    document.documentElement.setAttribute("dir", direction); // Set direction attribute
+  }, [i18n.language]);
+
+  useEffect(() => {
     localLanguage && handleChangeLanguage(localLanguage);
-  }, [handleChangeLanguage]);
+  }, [handleChangeLanguage, localLanguage]);
 
   return useMemo(
-    () => ({ language: i18n.language as LanguageType, setLanguage: handleChangeLanguage }),
-    [handleChangeLanguage, i18n.language],
+    () => ({
+      language: i18n.language as LanguageType,
+      setLanguage: handleChangeLanguage,
+      direction: i18n.language === "ar" ? "rtl" : "ltr",
+    }),
+    [handleChangeLanguage, i18n.language]
   );
 };

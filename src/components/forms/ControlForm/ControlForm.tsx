@@ -1,13 +1,12 @@
-import React, { useState } from 'react';
-import { Avatar } from 'antd';
-import { SmileOutlined, UserOutlined } from '@ant-design/icons';
-import { BaseButtonsForm } from '@app/components/common/forms/BaseButtonsForm/BaseButtonsForm';
-import { AddFormModal } from '../../Modals/AddFormModal';
-import { Input } from '../../common/inputs/Input/Input';
-import { Button } from '../../common/buttons/Button/Button';
-import { useTranslation } from 'react-i18next';
-import * as S from './ControlForm.styles';
-import { notificationController } from '@app/controllers/notificationController';
+import React, { useState } from "react";
+import { Avatar } from "antd";
+import { SmileOutlined, UserOutlined } from "@ant-design/icons";
+import { BaseButtonsForm } from "@app/components/common/forms/BaseButtonsForm/BaseButtonsForm";
+import { Input } from "../../common/inputs/Input/Input";
+import { Button } from "../../common/buttons/Button/Button";
+import { useTranslation } from "react-i18next";
+import * as S from "./ControlForm.styles";
+import { notificationController } from "@app/controllers/notificationController";
 
 const layout = {
   labelCol: { span: 24 },
@@ -38,17 +37,16 @@ export const ControlForm: React.FC = () => {
     setTimeout(() => {
       setFieldsChanged(false);
       setLoading(false);
-      notificationController.success({ message: t('common.success') });
-      console.log(values);
+      notificationController.success({ message: t("common.success") });
     }, 1000);
   };
 
   return (
     <BaseButtonsForm.Provider
       onFormFinish={(name, { values, forms }) => {
-        if (name === 'userForm') {
+        if (name === "userForm") {
           const { controlForm } = forms;
-          const users = controlForm.getFieldValue('users') || [];
+          const users = controlForm.getFieldValue("users") || [];
           controlForm.setFieldsValue({ users: [...users, values] });
           setVisible(false);
         }
@@ -61,10 +59,14 @@ export const ControlForm: React.FC = () => {
         footer={
           <BaseButtonsForm.Item>
             <Button htmlType="submit" type="primary" loading={isLoading}>
-              {t('common.submit')}
+              {t("common.submit")}
             </Button>
-            <S.AddUserButton type="default" htmlType="button" onClick={showUserModal}>
-              {t('forms.controlFormLabels.addUser')}
+            <S.AddUserButton
+              type="default"
+              htmlType="button"
+              onClick={showUserModal}
+            >
+              {t("forms.controlFormLabels.addUser")}
             </S.AddUserButton>
           </BaseButtonsForm.Item>
         }
@@ -73,18 +75,25 @@ export const ControlForm: React.FC = () => {
       >
         <BaseButtonsForm.Item
           name="group"
-          label={t('forms.controlFormLabels.groupName')}
-          rules={[{ required: true, message: t('forms.controlFormLabels.groupNameError') }]}
+          label={t("forms.controlFormLabels.groupName")}
+          rules={[
+            {
+              required: true,
+              message: t("forms.controlFormLabels.groupNameError"),
+            },
+          ]}
         >
           <Input />
         </BaseButtonsForm.Item>
         <S.UserList
-          label={t('forms.controlFormLabels.userList')}
+          label={t("forms.controlFormLabels.userList")}
           // eslint-disable-next-line
-          shouldUpdate={(prevValues: any, curValues: any) => prevValues.users !== curValues.users}
+          shouldUpdate={(prevValues: any, curValues: any) =>
+            prevValues.users !== curValues.users
+          }
         >
           {({ getFieldValue }) => {
-            const users: UserType[] = getFieldValue('users') || [];
+            const users: UserType[] = getFieldValue("users") || [];
             return users.length ? (
               <S.List>
                 {users.map((user, index) => (
@@ -98,13 +107,12 @@ export const ControlForm: React.FC = () => {
               </S.List>
             ) : (
               <S.Text>
-                ( <SmileOutlined /> {t('forms.controlFormLabels.noUser')} )
+                ( <SmileOutlined /> {t("forms.controlFormLabels.noUser")} )
               </S.Text>
             );
           }}
         </S.UserList>
       </BaseButtonsForm>
-      {/* <AddFormModal visible={visible} onCancel={hideUserModal} /> */}
     </BaseButtonsForm.Provider>
   );
 };
