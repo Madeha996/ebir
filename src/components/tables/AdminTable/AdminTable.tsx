@@ -124,7 +124,7 @@ export const AdminBasicTable: React.FC = () => {
         notificationController.success({
           message: t("common.deleteAdminSuccessMessage"),
         });
-        refetch(); // Trigger a refetch after deleting an admin
+        refetch();
       })
       .catch((error) => {
         notificationController.error({
@@ -187,6 +187,7 @@ export const AdminBasicTable: React.FC = () => {
                 setIsDeleteVisible(true);
                 setDeletedmodaldata(record);
               }}
+              disabled={total === 1}
             >
               {t("tables.delete")}
             </Button>
