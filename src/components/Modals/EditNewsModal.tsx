@@ -11,14 +11,13 @@ interface EditNewsModalProps {
   editedValues: NewsModal | undefined;
   title?: string;
 }
-const { t } = useTranslation();
 
 const fields = [
   {
-    name: t("title"),
-    label: t("common.name"),
+    name: "title",
+    label: "common.name",
     component: Input,
-    rules: [{ required: true, message: t("common.requiredField") }],
+    rules: [{ required: true, message: "common.requiredField" }],
   },
 ];
 

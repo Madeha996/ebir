@@ -24,22 +24,22 @@ export const EditAdminModal: React.FC<EditAdminModalProps> = ({
   const fields = [
     {
       name: "name",
-      label: t("common.name"),
+      label: "common.name",
       component: Input,
-      rules: [{ required: true, message: t("common.requiredField") }], // Use `t` for message
+      rules: [{ required: true, message: "common.requiredField" }],
     },
     {
       name: "email",
-      label: t("common.email"),
+      label: "common.email",
       component: Input,
-      rules: [{ required: true, message: t("common.requiredField") }],
+      rules: [{ required: true, message: "common.requiredField" }],
     },
     {
       name: "password",
       label: t("common.password"),
       component: Input,
-      rules: [{ required: true, message: t("common.requiredField") }],
-      value: undefined, // Ensure password is undefined
+      rules: [{ required: true, message: "common.requiredField" }],
+      value: undefined,
     },
   ];
 
@@ -49,7 +49,7 @@ export const EditAdminModal: React.FC<EditAdminModalProps> = ({
       onCancel={onCancel}
       onEdit={onEdit}
       editedValues={editedValues}
-      title={title || t("common.editAdmin")} // Translate title
+      title={title || "common.editAdmin"}
       fields={fields}
     />
   );

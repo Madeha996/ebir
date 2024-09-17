@@ -13,7 +13,6 @@ import { Alert } from "@app/components/common/Alert/Alert";
 import { PagesTableData } from "@app/api/pages.api";
 import dayjs from "dayjs";
 import { CURRENT_PAGINATION, PAGE_SIZE_PAGINATION } from "@app/constants/Pages";
-import { useNavigate } from "react-router-dom";
 import { CreateNew, DeleteNew, GetAllNews, UpdateNew } from "@app/api/news.api";
 import { EditNewsModal } from "@app/components/Modals/EditNewsModal";
 import AddNewsModal from "@app/components/Modals/AddNewsModal";
