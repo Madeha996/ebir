@@ -20,9 +20,9 @@ const AddNewsModal: React.FC<{
       fields={[
         {
           name: "title",
-          label: t("common.title"),
+          label: "common.title",
           component: <Input />,
-          rules: [{ required: true, message: t("common.requiredField") }],
+          rules: [{ required: true, message: "common.requiredField" }],
         },
       ]}
     />

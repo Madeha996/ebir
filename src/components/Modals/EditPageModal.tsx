@@ -2,7 +2,6 @@ import React from "react";
 import { Input } from "@app/components/common/inputs/Input/Input";
 import EditModal from "./Generic/GenericEditModal";
 import { PagesModal } from "@app/domain/AppModal";
-import { useTranslation } from "react-i18next";
 
 interface EditPageModalProps {
   visible: boolean;
@@ -11,14 +10,13 @@ interface EditPageModalProps {
   editedValues: PagesModal | undefined;
   title?: string;
 }
-const { t } = useTranslation();
 
 const fields = [
   {
     name: "name",
-    label: t("common.name"),
+    label: "common.name",
     component: Input,
-    rules: [{ required: true, message: t("common.requiredField") }],
+    rules: [{ required: true, message: "common.requiredField" }],
   },
 ];
 
