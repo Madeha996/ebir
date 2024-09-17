@@ -100,7 +100,8 @@
     "editNew": "تعديل الخبر",
     "editAdmin": "تعديل المسؤول",
     "deleteNewSuccessMessage": "تم حذف الخبر بنجاح",
-    "deleteSuccessMessage": "تم حذف الصفحة بنجاح"
+    "deleteSuccessMessage": "تم حذف الصفحة بنجاح",
+    "deleteAdminSuccessMessage": "تم حذف الأدمن بنجاح"
   },
   "error404": {
     "comeBack": "العودة إلى الصفحة الرئيسية",

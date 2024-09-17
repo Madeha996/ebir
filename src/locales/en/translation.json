@@ -87,6 +87,7 @@
     "editPage": "Edit Page",
     "deleteEnsureMessage": "Do you want to delete ?",
     "deletePagesSuccessMessage": "Page deleted Successfully",
+    "deleteAdminSuccessMessage": "Admin deleted Successfully",
     "whatsapp": "WhatsApp",
     "twitter": "Twitter",
     "facebook": "Facebook",
